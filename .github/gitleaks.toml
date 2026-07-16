@@ -1,0 +1,34 @@
+# Gitleaks configuration
+# Customize secret detection rules and suppress false positives
+# Docs: https://github.com/gitleaks/gitleaks#configuration
+
+title = "Gitleaks config"
+
+# ── Allowlist (global) ──────────────────────────
+# Paths and patterns to ignore across all rules
+[allowlist]
+  description = "Global allowlist"
+
+  # Files to skip scanning
+  paths = [
+    '''\.lock$''',
+    '''package-lock\.json$''',
+    '''yarn\.lock$''',
+    '''\.min\.js$''',
+    '''\.map$''',
+    '''node_modules''',
+    '''dist/''',
+    '''build/''',
+    '''\.test\.(ts|js|tsx|jsx)$''',
+    '''__tests__/''',
+    '''__mocks__/''',
+  ]
+
+  # Regex patterns for values that are NOT secrets (reduce false positives)
+  regexes = [
+    '''EXAMPLE_''',
+    '''YOUR_.*_HERE''',
+    '''sk-test-''',
+    '''pk_test_''',
+    '''placeholder''',
+  ]
