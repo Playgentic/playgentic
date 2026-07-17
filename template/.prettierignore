@@ -1,0 +1,9 @@
+node_modules
+results
+dist
+*.feature
+
+# generated / ephemeral output
+docs
+.features-gen
+.agent-sessions

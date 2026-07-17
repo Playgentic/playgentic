@@ -1,13 +1,7 @@
-
-# Playwright
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-/test-artifacts
-.env*
-!.env.example
-.features-gen
-.agent-sessions
+*.tgz
+/scratch*/
+.DS_Store
+
+# Claude Code local settings (this repo's agent assets live in assets/claude/)
+.claude/

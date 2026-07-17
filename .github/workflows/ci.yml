@@ -4,20 +4,25 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
-  lint-and-typecheck:
-    runs-on: ubuntu-latest
+  smoke:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: lts/*
-          cache: "npm"
-      - name: Install dependencies
-        run: npm ci
-      - name: Lint
-        run: npm run lint
-      - name: Typecheck
-        run: npm run typecheck
+          node-version: 20
+
+      # Scaffolds a suite into a temp dir and runs the zero-dep gates.
+      - name: Smoke
+        run: npm run smoke
+
+      # Catches packaging mistakes (files whitelist, tarball contents).
+      - name: Pack check
+        run: npm pack --dry-run

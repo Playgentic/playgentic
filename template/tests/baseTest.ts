@@ -16,7 +16,9 @@ type Fixtures = {
 
 // customize the test config to initalize and use the custom fixtures
 export const test = base.extend<Fixtures>({
-   world: async ({ page, context }, use) => {
+   // Playwright requires the first arg to be an object pattern; this fixture needs no other fixtures.
+   // eslint-disable-next-line no-empty-pattern
+   world: async ({}, use) => {
      await use({
        baseUrl: "",
      });

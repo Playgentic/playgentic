@@ -1,41 +1,47 @@
 {
-  "name": "agentic-playwright-boiler",
+  "name": "playgentic",
   "version": "0.1.0",
-  "description": "an agent-enabled playwright repo with BDD, templated for easy reuse",
-  "main": "index.js",
+  "description": "Scaffold agentic Playwright-BDD test suites and keep your Claude Code agent definitions in sync.",
+  "type": "module",
+  "bin": {
+    "playgentic": "bin/cli.mjs"
+  },
   "scripts": {
-    "test:compile": "npx bddgen",
-    "test": "npx bddgen && playwright test",
-    "test:headed": "npx bddgen && playwright test --headed",
-    "test:debug": "npx bddgen && playwright test --debug",
-    "test:trace": "npx bddgen && playwright test --trace on",
-    "test:gui": "npx bddgen && playwright test --ui",
-    "report:playwright": "playwright show-report test-artifacts/playwright-report",
-    "report:cucumber": "npx http-server .artifacts/cucumber-report -c-1 -a localhost -o index.html",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "prepare": "husky",
-    "artifact-clean": "rm -rf playwright-report test-artifacts test-results"
+    "smoke": "node scripts/smoke.mjs",
+    "pack:check": "npm pack --dry-run",
+    "prepublishOnly": "npm run smoke"
+  },
+  "files": [
+    "bin",
+    "assets",
+    "template"
+  ],
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [
     "playwright",
     "playwright-bdd",
+    "bdd",
+    "cucumber",
+    "claude-code",
     "agentic-ai",
+    "scaffold",
+    "cli",
     "test-automation",
     "SDET"
   ],
   "author": "Blaise Moses",
-  "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "@playwright/test": "^1.61.1",
-    "@types/node": "^26.1.1",
-    "dotenv": "^17.4.2",
-    "eslint": "^10.7.0",
-    "husky": "^9.1.7",
-    "playwright-bdd": "^9.2.0",
-    "prettier": "^3.9.5"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlaiseMoses01/playgentic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BlaiseMoses01/playgentic/issues"
+  },
+  "homepage": "https://github.com/BlaiseMoses01/playgentic#readme",
+  "publishConfig": {
+    "access": "public"
   }
 }
