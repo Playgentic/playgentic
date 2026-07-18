@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Architecture: the agent pipeline — playgentic docs</title>
+    <meta name="description" content="How the playgentic agent pipeline is built: orchestrator, explorer, and auditor; the gen and heal loops; runner isolation; and the sync model." />
+    <meta name="theme-color" content="#15803d" />
+    <link rel="icon" href="../assets/icon.png" />
+    <link rel="stylesheet" href="../assets/site.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="../" aria-label="playgentic home">
+          <img class="brand-mark" src="../assets/icon.png" alt="" />
+          <span>playgentic</span>
+        </a>
+        <nav class="nav-links" id="menu">
+          <a href="./" class="active">Docs</a>
+          <a href="../playground/">Playground</a>
+          <a href="agent-pipeline.html">Architecture</a>
+          <span class="nav-icons">
+            <a href="https://github.com/BlaiseMoses01/playgentic" aria-label="GitHub" target="_blank" rel="noopener">
+              <svg class="ico-gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.575.106.785-.25.785-.556 0-.274-.01-1-.015-1.965-3.196.695-3.87-1.54-3.87-1.54-.523-1.33-1.278-1.683-1.278-1.683-1.045-.714.08-.7.08-.7 1.155.082 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.68 0-1.255.448-2.28 1.183-3.084-.119-.29-.513-1.46.112-3.043 0 0 .965-.31 3.163 1.178a11 11 0 0 1 5.762 0c2.196-1.488 3.16-1.178 3.16-1.178.626 1.583.232 2.753.114 3.043.737.804 1.18 1.83 1.18 3.084 0 4.415-2.688 5.386-5.25 5.67.413.357.78 1.06.78 2.137 0 1.543-.014 2.787-.014 3.166 0 .308.207.667.79.554A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z" /></svg>
+            </a>
+            <a href="https://www.npmjs.com/package/playgentic" aria-label="playgentic on npm" target="_blank" rel="noopener">
+              <svg class="ico-npm" viewBox="0 0 24 24" fill="#CB3837" aria-hidden="true"><path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.08 19.17H5.113z" /></svg>
+            </a>
+          </span>
+        </nav>
+        <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <button class="doc-sidebar-toggle" aria-expanded="false">☰ Docs menu</button>
+    </div>
+
+    <div class="doc-shell">
+      <aside class="doc-sidebar">
+        <div class="doc-nav-group">
+          <p class="label">playgentic</p>
+          <a href="../">Home</a>
+          <a href="../playground/">Playground</a>
+        </div>
+        <div class="doc-nav-group">
+          <p class="label">Guide</p>
+          <a href="./">Getting started</a>
+          <a href="template.html">Working off the template</a>
+        </div>
+        <div class="doc-nav-group">
+          <p class="label">Architecture</p>
+          <a href="agent-pipeline.html" class="active">Agent pipeline</a>
+          <a href="repo-setup.html">Repo setup</a>
+        </div>
+      </aside>
+
+      <main class="doc-content">
+        <div class="crumbs">Docs / Architecture / Agent pipeline</div>
+        <h1>Architecture: the agent pipeline</h1>
+        <p class="lede">
+          How the pipeline that ships in every scaffolded suite (<code>.claude/</code>) is put together, and why.
+          If you just want to <em>use</em> it, <a href="./">Getting started</a> is enough — this is for understanding
+          and extending it.
+        </p>
+
+        <h2 id="principles">Design principles</h2>
+        <div class="principles">
+          <div class="principle"><span class="dot">●</span> <b>Never touch prod on the way</b> Agents work only inside an ephemeral <code>.agent-sessions/&lt;id&gt;/</code> copy; <code>tests/</code> changes land only via an explicit promotion step.</div>
+          <div class="principle"><span class="dot">●</span> <b>Human gate at the end</b> Nothing merges without you running <code>agent:promote</code> after review.</div>
+          <div class="principle"><span class="dot">●</span> <b>Reuse before writing</b> The orchestrator regenerates + reads the step wiki first, so new work reuses existing steps.</div>
+          <div class="principle"><span class="dot">●</span> <b>One tool touches the browser</b> Only the <code>bdd-explorer</code> drives the <code>playwright-test</code> MCP; everyone else delegates.</div>
+          <div class="principle"><span class="dot">●</span> <b>Adversarial review</b> A separate <code>bdd-auditor</code> challenges assertion strength and coverage before promotion.</div>
+          <div class="principle"><span class="dot">●</span> <b>Update agents in one place</b> Agent definitions live in the package and are pulled per-project via <code>playgentic sync</code>.</div>
+        </div>
+
+        <h2 id="components">Components</h2>
+        <p>Three actors inside Claude Code, working against your repo and one real browser:</p>
+        <div class="diagram-card">
+          <svg viewBox="0 0 900 260" role="img" aria-label="orchestrator dispatches the explorer which drives the browser, then the auditor reviews, then a human gate promotes into tests">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" /></marker>
+            </defs>
+            <path class="arch-edge" marker-end="url(#arrow)" d="M150 90 H210" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M370 90 H430" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M590 90 H650" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M300 128 V190 H430" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M740 128 V210 H180 V128" />
+            <g>
+              <rect class="arch-node" x="20" y="60" width="130" height="60" rx="12" />
+              <text class="arch-lbl" x="85" y="86" text-anchor="middle">Orchestrator</text>
+              <text class="arch-sub" x="85" y="104" text-anchor="middle">skill · plans</text>
+            </g>
+            <g>
+              <rect class="arch-node pass" x="210" y="60" width="160" height="60" rx="12" />
+              <text class="arch-lbl" x="290" y="86" text-anchor="middle">bdd-explorer</text>
+              <text class="arch-sub" x="290" y="104" text-anchor="middle">drives real browser</text>
+            </g>
+            <g>
+              <rect class="arch-node fail" x="430" y="60" width="160" height="60" rx="12" />
+              <text class="arch-lbl" x="510" y="86" text-anchor="middle">bdd-auditor</text>
+              <text class="arch-sub" x="510" y="104" text-anchor="middle">adversarial review</text>
+            </g>
+            <g>
+              <rect class="arch-node" x="650" y="60" width="150" height="60" rx="12" />
+              <text class="arch-lbl" x="725" y="86" text-anchor="middle">Human gate</text>
+              <text class="arch-sub" x="725" y="104" text-anchor="middle">you approve</text>
+            </g>
+            <g>
+              <rect class="arch-node" x="430" y="175" width="160" height="52" rx="12" />
+              <text class="arch-lbl" x="510" y="200" text-anchor="middle">.agent-sessions/</text>
+              <text class="arch-sub" x="510" y="216" text-anchor="middle">ephemeral · never prod</text>
+            </g>
+            <text class="arch-elabel" x="180" y="80" text-anchor="middle">dispatch</text>
+            <text class="arch-elabel" x="400" y="80" text-anchor="middle">review</text>
+            <text class="arch-elabel" x="620" y="80" text-anchor="middle">present</text>
+            <text class="arch-elabel" x="120" y="205" text-anchor="middle">promote → tests/</text>
+          </svg>
+        </div>
+        <ul>
+          <li><b>Orchestrator</b> — the <code>/bdd-pipeline</code> skill. Reads the flag (<code>--gen</code>/<code>--heal</code>),
+            plans cases, regenerates the wiki for reuse, scaffolds an isolated session, and dispatches the subagents.</li>
+          <li><b>bdd-explorer</b> (sonnet) — the only actor allowed to launch the browser via the
+            <code>playwright-test</code> MCP. It fills in <code>PENDING</code> step stubs by exploring the live app.</li>
+          <li><b>bdd-auditor</b> (haiku) — an adversarial reviewer that challenges assertion strength and coverage
+            against your standards in <code>.claude/rules/code-styles.md</code>.</li>
+        </ul>
+
+        <h2 id="gen">The generation loop</h2>
+        <p><code>/bdd-pipeline --gen</code> adds coverage. The orchestrator plans and scaffolds; the explorer does all
+          live-browser work; the auditor reviews; you approve.</p>
+        <ol>
+          <li>Guard the branch, plan cases, <code>npm run wiki</code> to surface reusable steps.</li>
+          <li><code>agent:new</code> — copy <code>baseTest</code> and extend files into a fresh session.</li>
+          <li>Write the <code>.feature</code> and step stubs that <b>throw</b> <code>PENDING</code>.</li>
+          <li>Dispatch the explorer with the session + test ids.</li>
+          <li>The explorer loops (up to 3 repeats) until green: run → hit <code>PENDING</code> → explore the live app →
+            fill the step → rerun.</li>
+          <li>The auditor reviews changed files and reports <code>BLOCK</code> / <code>MEETS</code> / <code>SHIP</code>.</li>
+          <li>You approve → <code>agent:promote</code> copies the session's <code>tests/</code> over prod and regenerates the wiki.</li>
+        </ol>
+
+        <h3 id="stub-loop">The explorer's stub loop</h3>
+        <p>New steps are scaffolded as stubs that <b>throw</b>. The thrown <code>PENDING exploration</code> is the
+          explorer's signal to go look at the real app — it never guesses locators from stale artifacts; every
+          exploration is fresh.</p>
+        <pre class="code">RunTest → hits PENDING / failure → Explore (snapshot, locate, infer on live app)
+        → Patch the step → rerun → passes ✓   (or 3 fails → write FAIL_REASON.md)</pre>
+
+        <h2 id="heal">The healing loop</h2>
+        <p><code>/bdd-pipeline --heal</code> repairs broken or flaky tests. Same isolation, but it starts from an
+          existing failure and its priority is <b>not weakening the assertion to make it pass</b>.</p>
+        <pre class="code">failing test + report
+  → agent:new --extend (copy the failing feature + steps)
+  → reproduce in the session
+  → bdd-explorer re-explores the live app and repairs
+  → bdd-auditor guards assertion strength
+  → approve? → agent:promote → tests/   |   no → back to the explorer</pre>
+
+        <h2 id="isolation">Runner isolation</h2>
+        <p>The agents run through a dedicated Playwright project, <code>agent-session</code>, that is <b>only defined
+          when <code>AGENT_SESSION</code> is set</b> and globs <em>only</em> that session's folder. Your real
+          <code>desktop</code>/<code>mobile</code> projects and CI never see it, and it can never resolve a file under
+          prod <code>tests/</code>.</p>
+        <div class="diagram-card">
+          <svg viewBox="0 0 900 210" role="img" aria-label="normal runs glob tests slash while the agent-session run globs only the ephemeral session folder">
+            <defs>
+              <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" /></marker>
+            </defs>
+            <text class="arch-elabel" x="30" y="34">npm test / CI  (AGENT_SESSION unset)</text>
+            <path class="arch-edge" marker-end="url(#arrow2)" d="M190 70 H300" />
+            <path class="arch-edge" marker-end="url(#arrow2)" d="M190 70 H250 V104 H300" />
+            <g>
+              <rect class="arch-node pass" x="40" y="46" width="150" height="48" rx="12" />
+              <text class="arch-lbl" x="115" y="68" text-anchor="middle">desktop</text>
+              <text class="arch-sub" x="115" y="84" text-anchor="middle">+ mobile</text>
+            </g>
+            <g>
+              <rect class="arch-node" x="300" y="52" width="150" height="48" rx="12" />
+              <text class="arch-lbl" x="375" y="74" text-anchor="middle">tests/**</text>
+              <text class="arch-sub" x="375" y="90" text-anchor="middle" style="display:none"></text>
+            </g>
+
+            <text class="arch-elabel" x="500" y="34">npm run test:agent  (AGENT_SESSION=&lt;id&gt;)</text>
+            <path class="arch-edge" marker-end="url(#arrow2)" d="M660 70 H720" />
+            <g>
+              <rect class="arch-node fail" x="500" y="46" width="160" height="48" rx="12" />
+              <text class="arch-lbl" x="580" y="68" text-anchor="middle">agent-session</text>
+              <text class="arch-sub" x="580" y="84" text-anchor="middle">only when set</text>
+            </g>
+            <g>
+              <rect class="arch-node" x="720" y="46" width="160" height="48" rx="12" />
+              <text class="arch-lbl" x="800" y="68" text-anchor="middle">.agent-sessions/</text>
+              <text class="arch-sub" x="800" y="84" text-anchor="middle">&lt;id&gt;/tests/**</text>
+            </g>
+          </svg>
+        </div>
+        <p><code>agent:promote</code> is the <em>only</em> bridge from a session back to <code>tests/</code>: it lints the
+          session's docstrings, copies its <code>tests/**</code> over prod (extending existing files, adding new ones),
+          regenerates the wiki, and typechecks — aborting before it writes if anything fails.</p>
+
+        <h2 id="sync">Keeping agents current: the sync model</h2>
+        <p>Agent definitions are versioned in the playgentic package and pulled into each project. Files split into two
+          buckets so updates never fight your customizations:</p>
+        <ul>
+          <li><b>Managed</b> — <code>skills</code> and <code>agents</code>. <code>sync</code> overwrites these to the shipped version.</li>
+          <li><b>Yours</b> — <code>rules/code-styles.md</code> (copied only if absent) and any skill/agent you add.
+            <code>sync</code> never touches them.</li>
+        </ul>
+        <div class="callout">
+          <b>Editing a managed file forks it</b>
+          The next <code>sync</code> will overwrite a managed skill/agent you edited — by design. Put your standards in
+          <code>rules/code-styles.md</code> (which the auditor reads) or add your own skills/agents, which sync leaves alone.
+        </div>
+
+        <h2 id="extending">Extending the pipeline</h2>
+        <ul>
+          <li><b>Auditor standards</b> — <code>.claude/rules/code-styles.md</code> is where most of the auditor's
+            judgement comes from. The more concrete it is, the sharper the reviews.</li>
+          <li><b>Add a subagent/skill</b> — drop it in <code>.claude/</code>; <code>sync</code> leaves anything you add alone.</li>
+          <li><b>Change the runner</b> — the <code>agent-session</code> project in <code>playwright.config.ts</code> is a
+            normal Playwright project; adjust its device/globs as needed.</li>
+        </ul>
+        <p class="link-out">↗ Full source with mermaid diagrams:
+          <a href="https://github.com/BlaiseMoses01/playgentic/blob/main/docs/agent-design.md" target="_blank" rel="noopener">docs/agent-design.md</a></p>
+
+        <div class="doc-pager">
+          <a href="template.html"><span class="dir">← Previous</span> Working off the template</a>
+          <a class="next" href="repo-setup.html"><span class="dir">Next →</span> Architecture: Repo setup</a>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <div class="wrap footer-inner">
+        <span class="footer-brand"><img src="../assets/icon.png" alt="" /><span>MIT · playgentic</span></span>
+        <span class="footer-links">
+          <a href="../">Home</a>
+          <a href="../playground/">Playground</a>
+          <a href="https://github.com/BlaiseMoses01/playgentic" target="_blank" rel="noopener" aria-label="GitHub"><svg class="ico-gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.575.106.785-.25.785-.556 0-.274-.01-1-.015-1.965-3.196.695-3.87-1.54-3.87-1.54-.523-1.33-1.278-1.683-1.278-1.683-1.045-.714.08-.7.08-.7 1.155.082 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.68 0-1.255.448-2.28 1.183-3.084-.119-.29-.513-1.46.112-3.043 0 0 .965-.31 3.163 1.178a11 11 0 0 1 5.762 0c2.196-1.488 3.16-1.178 3.16-1.178.626 1.583.232 2.753.114 3.043.737.804 1.18 1.83 1.18 3.084 0 4.415-2.688 5.386-5.25 5.67.413.357.78 1.06.78 2.137 0 1.543-.014 2.787-.014 3.166 0 .308.207.667.79.554A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z" /></svg></a>
+          <a href="https://www.npmjs.com/package/playgentic" target="_blank" rel="noopener" aria-label="npm"><svg class="ico-npm" viewBox="0 0 24 24" fill="#CB3837" aria-hidden="true"><path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.08 19.17H5.113z" /></svg></a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="../assets/site.js"></script>
+  </body>
+</html>

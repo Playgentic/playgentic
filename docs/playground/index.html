@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Playground — playgentic</title>
+    <meta
+      name="description"
+      content="A deterministic app-under-test for playgentic: login, task list, async run, and a results table — each with stable data-testid selectors. Point TARGET_URL here and let the agents cover it."
+    />
+    <meta name="theme-color" content="#15803d" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Playground — playgentic" />
+    <meta property="og:description" content="A deterministic app-under-test with stable data-testid selectors — the challenges playgentic automates." />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="icon" href="../assets/icon.png" />
+    <link rel="stylesheet" href="../assets/site.css" />
+  </head>
+  <body>
+    <!-- ============ NAV ============ -->
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="../" aria-label="playgentic home">
+          <img class="brand-mark" src="../assets/icon.png" alt="" />
+          <span>playgentic</span>
+        </a>
+
+        <nav class="nav-links" id="menu">
+          <a href="../docs/">Docs</a>
+          <a href="./" class="active">Playground</a>
+          <a href="../docs/agent-pipeline.html">Architecture</a>
+          <span class="nav-icons">
+            <a href="https://github.com/BlaiseMoses01/playgentic" aria-label="GitHub" target="_blank" rel="noopener">
+              <svg class="ico-gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.575.106.785-.25.785-.556 0-.274-.01-1-.015-1.965-3.196.695-3.87-1.54-3.87-1.54-.523-1.33-1.278-1.683-1.278-1.683-1.045-.714.08-.7.08-.7 1.155.082 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.68 0-1.255.448-2.28 1.183-3.084-.119-.29-.513-1.46.112-3.043 0 0 .965-.31 3.163 1.178a11 11 0 0 1 5.762 0c2.196-1.488 3.16-1.178 3.16-1.178.626 1.583.232 2.753.114 3.043.737.804 1.18 1.83 1.18 3.084 0 4.415-2.688 5.386-5.25 5.67.413.357.78 1.06.78 2.137 0 1.543-.014 2.787-.014 3.166 0 .308.207.667.79.554A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z" />
+              </svg>
+            </a>
+            <a href="https://www.npmjs.com/package/playgentic" aria-label="playgentic on npm" target="_blank" rel="noopener">
+              <svg class="ico-npm" viewBox="0 0 24 24" fill="#CB3837" aria-hidden="true">
+                <path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.08 19.17H5.113z" />
+              </svg>
+            </a>
+          </span>
+        </nav>
+
+        <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============ HEADER ============ -->
+    <section id="top">
+      <div class="wrap">
+        <div class="sec-head" style="margin-bottom: 28px">
+          <div class="kicker">this page is the app under test</div>
+          <h2>Playground — automate these challenges</h2>
+          <p>
+            Four deterministic widgets with stable <code class="mono">data-testid</code> selectors. No backend,
+            no randomness — so tests against them never flake. Point a playgentic suite's <code>TARGET_URL</code>
+            at this page and let the agents write the coverage.
+          </p>
+        </div>
+
+        <!-- Demo video slot: swap the placeholder for an <iframe> (e.g. a YouTube embed) once recorded. -->
+        <div class="video-embed" id="demo">
+          <!--
+            To publish the recording, replace the .video-placeholder below with, e.g.:
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="playgentic automating the playground"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+          -->
+          <div class="video-placeholder">
+            <span class="play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            </span>
+            <div><b>Demo coming soon</b></div>
+            <small>watch playgentic automate every challenge below</small>
+          </div>
+        </div>
+
+        <div class="cta-row" style="justify-content: flex-start; margin-top: 22px">
+          <a class="btn btn-primary" href="#challenges">Jump to the challenges</a>
+          <a class="btn btn-ghost" href="../docs/">How to point a suite here →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CHALLENGES ============ -->
+    <section class="alt" id="challenges">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="kicker">data-testid contracts</div>
+          <h2>The challenges</h2>
+          <p>Each widget lists the selectors it exposes — the same contract the example feature files target.</p>
+        </div>
+
+        <div class="play-grid">
+          <!-- Login -->
+          <div class="widget">
+            <div class="widget-head">
+              <h3>Login form</h3>
+              <span class="tid">#login</span>
+            </div>
+            <div class="widget-body">
+              <form id="login-form" novalidate>
+                <div class="field">
+                  <label for="login-username">Username</label>
+                  <input type="text" id="login-username" data-testid="login-username" autocomplete="off" />
+                </div>
+                <div class="field" style="margin-top: 10px">
+                  <label for="login-password">Password</label>
+                  <input type="password" id="login-password" data-testid="login-password" autocomplete="off" />
+                </div>
+                <div style="margin-top: 12px">
+                  <button type="submit" class="btn-sm" data-testid="login-submit">Sign in</button>
+                </div>
+                <div class="status ok" data-testid="login-success" style="margin-top: 12px">Welcome, sdet. You're signed in.</div>
+                <div class="status err" data-testid="login-error" style="margin-top: 12px">Invalid credentials. Try again.</div>
+              </form>
+              <p class="hint">
+                Demo creds <code>sdet</code> / <code>playgentic</code>. In a real suite these come from
+                <code>.env</code> (<code>STANDARD_USER</code> / <code>STANDARD_PASS</code>), never hardcoded in a feature.
+              </p>
+              <p class="hint mono">login-username · login-password · login-submit · login-success · login-error</p>
+            </div>
+          </div>
+
+          <!-- Task list -->
+          <div class="widget">
+            <div class="widget-head">
+              <h3>Task list</h3>
+              <span class="tid">#tasks</span>
+            </div>
+            <div class="widget-body">
+              <div class="task-row">
+                <input type="text" id="task-input" data-testid="task-input" placeholder="Add a task…" />
+                <button class="btn-sm" data-testid="task-add" id="task-add">Add</button>
+              </div>
+              <ul class="tasks" id="task-list" data-testid="task-list"></ul>
+              <div class="filters">
+                <button class="chip active" data-testid="filter-all" data-filter="all">All</button>
+                <button class="chip" data-testid="filter-active" data-filter="active">Active</button>
+                <button class="chip" data-testid="filter-done" data-filter="done">Done</button>
+                <span class="task-count" data-testid="task-count">0 active</span>
+              </div>
+              <p class="hint mono">task-input · task-add · task-item · task-toggle · task-delete · filter-* · task-count</p>
+            </div>
+          </div>
+
+          <!-- Async run -->
+          <div class="widget">
+            <div class="widget-head">
+              <h3>Async run</h3>
+              <span class="tid">#run</span>
+            </div>
+            <div class="widget-body">
+              <p class="hint">Kicks off a fake test run: a spinner appears, then a deterministic result — a clean auto-wait target.</p>
+              <div>
+                <button class="btn-sm" id="run-button" data-testid="run-button">
+                  <span id="run-spinner" class="spinner" data-testid="run-spinner" style="display: none"></span>
+                  <span id="run-label">Run tests</span>
+                </button>
+              </div>
+              <div class="status ok" data-testid="run-result" id="run-result">3 passed · 0 failed · 1.2s</div>
+              <p class="hint mono">run-button · run-spinner · run-result</p>
+            </div>
+          </div>
+
+          <!-- Results table -->
+          <div class="widget">
+            <div class="widget-head">
+              <h3>Results table</h3>
+              <span class="tid">#results</span>
+            </div>
+            <div class="widget-body">
+              <input type="text" id="results-filter" data-testid="results-filter" placeholder="Filter by name…" />
+              <div class="table-wrap">
+                <table class="results" data-testid="results-table">
+                  <thead>
+                    <tr>
+                      <th data-testid="sort-name" data-key="name">Scenario <span class="caret">↕</span></th>
+                      <th data-testid="sort-status" data-key="status">Status <span class="caret">↕</span></th>
+                      <th data-key="ms">Duration</th>
+                    </tr>
+                  </thead>
+                  <tbody id="results-body"></tbody>
+                </table>
+              </div>
+              <p class="hint mono">results-table · result-row · results-filter · sort-name · sort-status</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRY IT OUT ============ -->
+    <section id="try">
+      <div class="wrap">
+        <div class="example-split">
+          <div>
+            <div class="kicker">try it out</div>
+            <h3>Automate it yourself</h3>
+            <p>
+              Scaffold a suite, set <code>TARGET_URL</code> to this page, and run <code>/bdd-pipeline --gen</code>.
+              The agents explore each widget above and write Playwright-BDD coverage against these exact selectors.
+            </p>
+            <div class="cta-row" style="justify-content: flex-start">
+              <a class="btn btn-primary" href="../docs/">Getting started →</a>
+              <a class="btn btn-ghost" href="../docs/template.html">Working off the template →</a>
+            </div>
+          </div>
+          <div>
+            <div class="cmd-block">
+              <pre class="cmd"><span class="c">$</span> npx playgentic init pg-demo &amp;&amp; cd pg-demo
+<span class="c">$</span> echo "TARGET_URL=https://blaisemoses01.github.io/playgentic/playground/" &gt; .env
+<span class="c">$</span> npx playwright install
+<span class="c">&gt;</span> /bdd-pipeline --gen   <span class="c"># in Claude Code</span></pre>
+              <button class="copy-btn" data-copy="npx playgentic init pg-demo && cd pg-demo&#10;echo &quot;TARGET_URL=https://blaisemoses01.github.io/playgentic/playground/&quot; > .env&#10;npx playwright install" aria-label="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+      <div class="wrap footer-inner">
+        <span class="footer-brand">
+          <img src="../assets/icon.png" alt="" />
+          <span>MIT · scaffolded suites, agentic tests</span>
+        </span>
+        <span class="footer-links">
+          <a href="../docs/">Docs</a>
+          <a href="../">Home</a>
+          <a href="https://github.com/BlaiseMoses01/playgentic" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg class="ico-gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.575.106.785-.25.785-.556 0-.274-.01-1-.015-1.965-3.196.695-3.87-1.54-3.87-1.54-.523-1.33-1.278-1.683-1.278-1.683-1.045-.714.08-.7.08-.7 1.155.082 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.68 0-1.255.448-2.28 1.183-3.084-.119-.29-.513-1.46.112-3.043 0 0 .965-.31 3.163 1.178a11 11 0 0 1 5.762 0c2.196-1.488 3.16-1.178 3.16-1.178.626 1.583.232 2.753.114 3.043.737.804 1.18 1.83 1.18 3.084 0 4.415-2.688 5.386-5.25 5.67.413.357.78 1.06.78 2.137 0 1.543-.014 2.787-.014 3.166 0 .308.207.667.79.554A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z" />
+            </svg>
+          </a>
+          <a href="https://www.npmjs.com/package/playgentic" target="_blank" rel="noopener" aria-label="npm">
+            <svg class="ico-npm" viewBox="0 0 24 24" fill="#CB3837" aria-hidden="true">
+              <path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.08 19.17H5.113z" />
+            </svg>
+          </a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="../assets/site.js"></script>
+    <script src="../assets/playground.js"></script>
+  </body>
+</html>

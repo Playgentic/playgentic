@@ -40,8 +40,11 @@
   "bugs": {
     "url": "https://github.com/BlaiseMoses01/playgentic/issues"
   },
-  "homepage": "https://github.com/BlaiseMoses01/playgentic#readme",
+  "homepage": "https://blaisemoses01.github.io/playgentic/",
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "dotenv": "^17.4.2"
   }
 }

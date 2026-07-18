@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>playgentic — agentic test automation that actually works</title>
+    <meta
+      name="description"
+      content="playgentic scaffolds a Playwright-BDD suite wired for Claude Code agents that explore your live app, write tests, and heal them — guarded by an adversarial auditor and a human gate. Agentic test automation that actually works."
+    />
+    <meta name="theme-color" content="#15803d" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="playgentic — agentic test automation that actually works" />
+    <meta
+      property="og:description"
+      content="Claude Code agents that write and heal your Playwright-BDD tests — explore the live app, review adversarially, promote only on your approval."
+    />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="icon" href="assets/icon.png" />
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <!-- ============ NAV ============ -->
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="./" aria-label="playgentic home">
+          <img class="brand-mark" src="assets/icon.png" alt="" />
+          <span>playgentic</span>
+        </a>
+
+        <nav class="nav-links" id="menu">
+          <a href="docs/">Docs</a>
+          <a href="playground/">Playground</a>
+          <a href="docs/agent-pipeline.html">Architecture</a>
+          <span class="nav-icons">
+            <a href="https://github.com/BlaiseMoses01/playgentic" aria-label="GitHub" target="_blank" rel="noopener">
+              <svg class="ico-gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.575.106.785-.25.785-.556 0-.274-.01-1-.015-1.965-3.196.695-3.87-1.54-3.87-1.54-.523-1.33-1.278-1.683-1.278-1.683-1.045-.714.08-.7.08-.7 1.155.082 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.68 0-1.255.448-2.28 1.183-3.084-.119-.29-.513-1.46.112-3.043 0 0 .965-.31 3.163 1.178a11 11 0 0 1 5.762 0c2.196-1.488 3.16-1.178 3.16-1.178.626 1.583.232 2.753.114 3.043.737.804 1.18 1.83 1.18 3.084 0 4.415-2.688 5.386-5.25 5.67.413.357.78 1.06.78 2.137 0 1.543-.014 2.787-.014 3.166 0 .308.207.667.79.554A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"
+                />
+              </svg>
+            </a>
+            <a href="https://www.npmjs.com/package/playgentic" aria-label="playgentic on npm" target="_blank" rel="noopener">
+              <svg class="ico-npm" viewBox="0 0 24 24" fill="#CB3837" aria-hidden="true">
+                <path
+                  d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.08 19.17H5.113z"
+                />
+              </svg>
+            </a>
+          </span>
+        </nav>
+
+        <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <div class="hero">
+      <div class="wrap">
+        <img class="mark" src="assets/icon.png" alt="playgentic mascot — a detective robot with a magnifying glass and a theatre mask" />
+        <h1>Agentic test automation that <span class="grad">actually works</span>.</h1>
+        <p class="sub">
+          playgentic scaffolds a <b>Playwright-BDD</b> suite wired for Claude Code agents that
+          <b>explore your live app, write the tests, and heal them</b> — guarded by an adversarial
+          auditor and a human gate, so the coverage is real, not rubber-stamped.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="docs/">Get started</a>
+          <a class="btn btn-ghost" href="playground/">Try the playground</a>
+        </div>
+        <div class="cta-row" style="margin-top: 18px">
+          <div class="cmd-pill">
+            <span><span class="prompt">$</span> npx playgentic init my-suite</span>
+            <button
+              class="copy-btn"
+              data-copy="npx playgentic init my-suite"
+              aria-label="Copy install command"
+              style="position: static"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ WHY IT ACTUALLY WORKS ============ -->
+    <section class="alt" id="why">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="kicker">why "actually works"</div>
+          <h2>Most agentic test bots write tests that lie</h2>
+          <p>They guess selectors from stale snapshots, then weaken assertions until the run goes green. playgentic is built to prevent exactly that.</p>
+        </div>
+        <div class="grid cols-3">
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+            </div>
+            <h3>Explores the live app</h3>
+            <p>The <code>bdd-explorer</code> drives a real browser to locate elements — it never guesses selectors from stale artifacts. Every exploration is fresh.</p>
+          </div>
+          <div class="card">
+            <div class="ic fail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 2 3 6v6c0 5 3.8 8.5 9 10 5.2-1.5 9-5 9-10V6z" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+            </div>
+            <h3>An auditor fights back</h3>
+            <p>A separate <code>bdd-auditor</code> adversarially reviews assertion strength and coverage — and can <b>BLOCK</b> weak tests before they ever reach your suite.</p>
+          </div>
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 2v6m0 8v6M2 12h6m8 0h6" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <h3>Heals without weakening</h3>
+            <p><code>--heal</code> repairs broken and flaky tests by re-exploring the live app — its explicit priority is <b>not</b> softening the assertion to make it pass.</p>
+          </div>
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="14" rx="2" />
+                <path d="M3 9h18" />
+              </svg>
+            </div>
+            <h3>Never touches prod</h3>
+            <p>Agents work only inside an ephemeral <code>.agent-sessions/</code> copy through an isolated runner. Your <code>tests/</code> change only on an explicit promotion.</p>
+          </div>
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </div>
+            <h3>You hold the merge button</h3>
+            <p>Nothing lands in your suite without a human gate — you review the auditor's verdict and the diff, then approve the promotion.</p>
+          </div>
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 5h16M4 12h16M4 19h10" />
+              </svg>
+            </div>
+            <h3>Real BDD, not throwaway scripts</h3>
+            <p>Output is Gherkin <code>.feature</code> files + typed steps on <b>Playwright</b> + <b>playwright-bdd</b> — readable, reusable, and indexed in a self-generating step wiki.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHAT YOU GET ============ -->
+    <section id="features">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="kicker">npx playgentic init</div>
+          <h2>What one command gives you</h2>
+          <p>A batteries-included BDD suite, a self-indexing step catalogue, and the agent pipeline — wired together.</p>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 4h16v4H4zM4 12h10v8H4zM17 12h3v8h-3z" />
+              </svg>
+            </div>
+            <h3>BDD suite</h3>
+            <p>
+              A <code>playwright-bdd</code> boiler with <code>desktop</code>/<code>mobile</code> projects, an
+              example feature + step, a scenario-scoped <code>world</code> fixture, husky pre-commit, eslint &amp; prettier.
+            </p>
+          </div>
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 5h16M4 12h16M4 19h10" />
+              </svg>
+            </div>
+            <h3>Step wiki</h3>
+            <p>
+              <code>npm run wiki</code> parses the <code>@domain/@description/@prereq/@uses</code> docstring on
+              every step into a browsable catalogue — so agents reuse steps instead of duplicating them.
+            </p>
+          </div>
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </div>
+            <h3>Docstring lint</h3>
+            <p>
+              <code>npm run lint:steps</code> (in pre-commit) fails any commit where a step lacks a compliant
+              docstring — so the wiki index never drifts from the suite.
+            </p>
+          </div>
+          <div class="card">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19" />
+              </svg>
+            </div>
+            <h3>Agent pipeline</h3>
+            <p>
+              Claude Code skills <code>/bdd-pipeline --gen|--heal</code> that scaffold work in isolation, drive
+              the explorer, review with the auditor, and promote only on your approval.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HIGH-LEVEL AGENT DESIGN ============ -->
+    <section class="alt" id="pipeline">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="kicker">/bdd-pipeline --gen | --heal</div>
+          <h2>How the pipeline works</h2>
+          <p>The orchestrator plans and scaffolds. One agent touches the browser. A second one tries to tear the work apart. You hold the merge button.</p>
+        </div>
+
+        <div class="diagram-card">
+          <svg viewBox="0 0 900 260" role="img" aria-label="playgentic agent pipeline: orchestrator to explorer to auditor to human gate to promoted tests">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0 0 L10 5 L0 10 z" />
+              </marker>
+            </defs>
+
+            <path class="arch-edge" marker-end="url(#arrow)" d="M150 90 H210" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M370 90 H430" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M590 90 H650" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M300 128 V190 H430" />
+            <path class="arch-edge" marker-end="url(#arrow)" d="M740 128 V210 H180 V128" />
+
+            <g>
+              <rect class="arch-node" x="20" y="60" width="130" height="60" rx="12" />
+              <text class="arch-lbl" x="85" y="86" text-anchor="middle">Orchestrator</text>
+              <text class="arch-sub" x="85" y="104" text-anchor="middle">skill · plans</text>
+            </g>
+            <g>
+              <rect class="arch-node pass" x="210" y="60" width="160" height="60" rx="12" />
+              <text class="arch-lbl" x="290" y="86" text-anchor="middle">bdd-explorer</text>
+              <text class="arch-sub" x="290" y="104" text-anchor="middle">drives real browser</text>
+            </g>
+            <g>
+              <rect class="arch-node fail" x="430" y="60" width="160" height="60" rx="12" />
+              <text class="arch-lbl" x="510" y="86" text-anchor="middle">bdd-auditor</text>
+              <text class="arch-sub" x="510" y="104" text-anchor="middle">adversarial review</text>
+            </g>
+            <g>
+              <rect class="arch-node" x="650" y="60" width="150" height="60" rx="12" />
+              <text class="arch-lbl" x="725" y="86" text-anchor="middle">Human gate</text>
+              <text class="arch-sub" x="725" y="104" text-anchor="middle">you approve</text>
+            </g>
+            <g>
+              <rect class="arch-node" x="430" y="175" width="160" height="52" rx="12" />
+              <text class="arch-lbl" x="510" y="200" text-anchor="middle">.agent-sessions/</text>
+              <text class="arch-sub" x="510" y="216" text-anchor="middle">ephemeral · never prod</text>
+            </g>
+
+            <text class="arch-elabel" x="180" y="80" text-anchor="middle">dispatch</text>
+            <text class="arch-elabel" x="400" y="80" text-anchor="middle">review</text>
+            <text class="arch-elabel" x="620" y="80" text-anchor="middle">present</text>
+            <text class="arch-elabel" x="120" y="205" text-anchor="middle">promote → tests/</text>
+          </svg>
+        </div>
+
+        <div class="principles">
+          <div class="principle"><span class="dot">●</span> <b>Never touch prod</b> Agents work only inside an ephemeral session copy; <code>tests/</code> changes land only on promotion.</div>
+          <div class="principle"><span class="dot">●</span> <b>One tool touches the browser</b> Only <code>bdd-explorer</code> drives the <code>playwright-test</code> MCP — everyone else delegates.</div>
+          <div class="principle"><span class="dot">●</span> <b>Adversarial review</b> A separate <code>bdd-auditor</code> challenges assertion strength &amp; coverage before promotion.</div>
+          <div class="principle"><span class="dot">●</span> <b>Reuse before writing</b> The orchestrator regenerates + reads the step wiki first, so new work reuses existing steps.</div>
+          <div class="principle"><span class="dot">●</span> <b>Human gate at the end</b> Nothing merges without you approving after review.</div>
+          <div class="principle"><span class="dot">●</span> <b>Update agents in one place</b> <code>playgentic sync</code> pulls the latest managed agents into every scaffolded project.</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 26px">
+          <a class="btn btn-ghost" href="docs/agent-pipeline.html">Read the architecture →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TEST TARGET / PLAYGROUND TEASER ============ -->
+    <section id="target">
+      <div class="wrap">
+        <div class="example-split">
+          <div>
+            <div class="kicker">see it work</div>
+            <h3>This site ships its own test targets</h3>
+            <p>
+              The <a href="playground/">Playground</a> is a deterministic app-under-test — a login, a task list,
+              an async run, and a results table, each with stable <code class="mono">data-testid</code> selectors.
+              Point a playgentic suite's <code>TARGET_URL</code> at it and watch the agents cover it.
+            </p>
+            <a class="btn btn-primary" href="playground/">Open the playground →</a>
+          </div>
+          <div>
+            <pre class="code"><span class="cm"># tests/features/login.feature</span>
+<span class="kw">Feature:</span> Playground login
+
+<span class="tag">@desktop @login</span>
+<span class="kw">Scenario:</span> A valid SDET signs in
+  <span class="kw">Given</span> I navigate to path <span class="str">"/"</span>
+  <span class="kw">When</span> I sign in with the standard user credentials
+  <span class="kw">Then</span> I see the login success message</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GET STARTED ============ -->
+    <section class="alt" id="install">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="kicker">node &gt;= 18 · npm</div>
+          <h2>Get started</h2>
+          <p>Scaffold a fresh suite, point it at your app, and run the example scenario. Full walkthrough in the <a href="docs/">docs</a>.</p>
+        </div>
+
+        <ol class="steps">
+          <li>
+            <h3>Scaffold a suite</h3>
+            <p>Generates the suite in a new folder (or merges into an existing project's <code>package.json</code>).</p>
+            <div class="cmd-block">
+              <pre class="cmd"><span class="c">$</span> npx playgentic init my-suite
+<span class="c">$</span> cd my-suite</pre>
+              <button class="copy-btn" data-copy="npx playgentic init my-suite&#10;cd my-suite" aria-label="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+          </li>
+          <li>
+            <h3>Point it at your app</h3>
+            <p>Set <code>TARGET_URL</code> (and optional creds) in <code>.env</code>, then install browsers.</p>
+            <div class="cmd-block">
+              <pre class="cmd"><span class="c">$</span> cp .env.example .env   <span class="c"># set TARGET_URL</span>
+<span class="c">$</span> npx playwright install</pre>
+              <button class="copy-btn" data-copy="cp .env.example .env&#10;npx playwright install" aria-label="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+          </li>
+          <li>
+            <h3>Generate the wiki &amp; run</h3>
+            <p>Build the step catalogue, then run the example scenario.</p>
+            <div class="cmd-block">
+              <pre class="cmd"><span class="c">$</span> npm run wiki
+<span class="c">$</span> npm test</pre>
+              <button class="copy-btn" data-copy="npm run wiki&#10;npm test" aria-label="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+          </li>
+          <li>
+            <h3>Let the agents write coverage</h3>
+            <p>In Claude Code (with the <code>playwright-test</code> MCP), run the pipeline. Keep managed agents current with <code>playgentic sync</code>.</p>
+            <div class="cmd-block">
+              <pre class="cmd"><span class="c">&gt;</span> /bdd-pipeline --gen
+<span class="c">$</span> npx playgentic sync   <span class="c"># pull latest agent defs</span></pre>
+              <button class="copy-btn" data-copy="/bdd-pipeline --gen" aria-label="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+          </li>
+        </ol>
+
+        <div style="text-align: center; margin-top: 30px">
+          <a class="btn btn-primary" href="docs/">Read the docs →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+      <div class="wrap footer-inner">
+        <span class="footer-brand">
+          <img src="assets/icon.png" alt="" />
+          <span>MIT · scaffolded suites, agentic tests</span>
+        </span>
+        <span class="footer-links">
+          <a href="docs/">Docs</a>
+          <a href="playground/">Playground</a>
+          <a href="https://github.com/BlaiseMoses01/playgentic" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg class="ico-gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.575.106.785-.25.785-.556 0-.274-.01-1-.015-1.965-3.196.695-3.87-1.54-3.87-1.54-.523-1.33-1.278-1.683-1.278-1.683-1.045-.714.08-.7.08-.7 1.155.082 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.68 0-1.255.448-2.28 1.183-3.084-.119-.29-.513-1.46.112-3.043 0 0 .965-.31 3.163 1.178a11 11 0 0 1 5.762 0c2.196-1.488 3.16-1.178 3.16-1.178.626 1.583.232 2.753.114 3.043.737.804 1.18 1.83 1.18 3.084 0 4.415-2.688 5.386-5.25 5.67.413.357.78 1.06.78 2.137 0 1.543-.014 2.787-.014 3.166 0 .308.207.667.79.554A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z" />
+            </svg>
+          </a>
+          <a href="https://www.npmjs.com/package/playgentic" target="_blank" rel="noopener" aria-label="npm">
+            <svg class="ico-npm" viewBox="0 0 24 24" fill="#CB3837" aria-hidden="true">
+              <path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.08 19.17H5.113z" />
+            </svg>
+          </a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="assets/site.js"></script>
+  </body>
+</html>

@@ -3,5 +3,8 @@ node_modules/
 /scratch*/
 .DS_Store
 
+# Local, illustrative feature files that target the landing page (docs/) — not shipped
+/examples/
+
 # Claude Code local settings (this repo's agent assets live in assets/claude/)
 .claude/
