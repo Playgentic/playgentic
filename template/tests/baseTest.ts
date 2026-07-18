@@ -6,7 +6,10 @@ import { test as base, createBdd } from "playwright-bdd";
  * create this type to sim it using a playwright fixture. You can add any scenario scoped variables here and use them across steps
  */
 type World = {
-  baseUrl: string; 
+  baseUrl: string;
+  // Auth credentials sourced from the environment (.env / CI secrets) so steps
+  // can sign in without hardcoding secrets in .feature files. See the env docs.
+  creds: { user: string; pass: string };
 }
 
 // // add your custom fixtures, types , etc into the fixture type , then you will be able to customize and extend them below in the test config
@@ -21,6 +24,10 @@ export const test = base.extend<Fixtures>({
    world: async ({}, use) => {
      await use({
        baseUrl: "",
+       creds: {
+         user: process.env.STANDARD_USER ?? "",
+         pass: process.env.STANDARD_PASS ?? "",
+       },
      });
     }
 });
