@@ -40,7 +40,7 @@
   "bugs": {
     "url": "https://github.com/BlaiseMoses01/playgentic/issues"
   },
-  "homepage": "https://blaisemoses01.github.io/playgentic/",
+  "homepage": "https://blaisemoses01.github.io/playgentic-local/",
   "publishConfig": {
     "access": "public"
   },
