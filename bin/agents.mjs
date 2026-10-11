@@ -150,7 +150,12 @@ function claude(target, log, ref) {
     },
     log,
   );
-  return [`Claude Code: trust the folder and accept the plugin prompt, or run /plugin install ${PLUGIN} --marketplace ${REPO}`];
+  // The settings register and enable the plugin, but don't install it. Install it
+  // from the trust prompt, or by its plugin@marketplace id (Claude Code has no
+  // --marketplace flag; the marketplace is already registered above).
+  return [
+    `Claude Code: trust the folder and accept the plugin install prompt, or run once: claude plugin install ${PLUGIN_ID} --scope project`,
+  ];
 }
 
 function copilot(target, log, ref) {

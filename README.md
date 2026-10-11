@@ -50,7 +50,7 @@ npx playgentic init .
   | Harness | Files written |
   | --- | --- |
   | all | `.playgentic/config.json`, plus an `AGENTS.md` block pointing any coding agent at `.playgentic/wiki/` |
-  | `claude` | `.claude/settings.json` (marketplace + `enabledPlugins`), `CLAUDE.md` importing `AGENTS.md` |
+  | `claude` | `.claude/settings.json` (marketplace + `enabledPlugins`), `CLAUDE.md` importing `AGENTS.md`. Each user still installs the plugin once: accept the prompt when trusting the folder, or run `claude plugin install playgentic@playgentic --scope project` |
   | `copilot` | `.github/copilot/settings.json` |
   | `codex` | `.codex/config.toml` (marketplace + enabled plugin; each user still runs `codex plugin add playgentic@playgentic` once) |
 

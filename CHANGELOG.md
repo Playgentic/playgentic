@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Fixed
+
+- **The Claude Code install hint printed by `--agents` / `playgentic agents`** used a `--marketplace` flag that Claude Code doesn't have. It now says `claude plugin install playgentic@playgentic --scope project`. The READMEs also note that writing the settings doesn't install the plugin: each user accepts the install prompt or runs that command once.
 
 ## [0.3.0] - 2026-10-11
 

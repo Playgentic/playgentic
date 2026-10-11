@@ -117,11 +117,11 @@ When("I add the item to my cart", async ({ page }) => {
 Wired with `--agents` (or `npx playgentic agents <list>` later). This enables the
 [playgentic agents](https://github.com/playgentic/playgentic-agents) plugin for each harness you picked:
 
-| Harness        | Wiring                                                                                       | Run                                  |
-| -------------- | -------------------------------------------------------------------------------------------- | ------------------------------------ |
-| Claude Code    | `.claude/settings.json` (marketplace + enabled plugin), `CLAUDE.md` → `AGENTS.md`            | `/playgentic:author-tests --gen ...` |
-| GitHub Copilot | `.github/copilot/settings.json`                                                              | the `author-tests` skill             |
-| Codex          | `.codex/config.toml` (trust the project, then `codex plugin add playgentic@playgentic` once) | the `author-tests` skill             |
+| Harness        | Wiring                                                                                                                                                                                                    | Run                                  |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| Claude Code    | `.claude/settings.json` (marketplace + enabled plugin), `CLAUDE.md` → `AGENTS.md` (trust the folder and accept the install prompt, or `claude plugin install playgentic@playgentic --scope project` once) | `/playgentic:author-tests --gen ...` |
+| GitHub Copilot | `.github/copilot/settings.json`                                                                                                                                                                           | the `author-tests` skill             |
+| Codex          | `.codex/config.toml` (trust the project, then `codex plugin add playgentic@playgentic` once)                                                                                                              | the `author-tests` skill             |
 
 The pipeline works as follows:
 
