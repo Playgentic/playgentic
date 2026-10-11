@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.2.0] - 2026-10-11
+
 The scaffold and the agents are now separate products. playgentic scaffolds the suite, and the agents live in the [playgentic-agents](https://github.com/playgentic/playgentic-agents) plugin for Claude Code, GitHub Copilot and Codex.
 
 ### Added
@@ -112,5 +116,6 @@ Everything below is part of this initial release.
 - MIT license, `README.md`, and the `docs/agent-design.md` design doc (component map, the
   gen/heal loops, runner isolation, and the sync model).
 
-[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/playgentic/playgentic/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/playgentic/playgentic/releases/tag/v0.1.0

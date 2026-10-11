@@ -1,6 +1,6 @@
 {
   "name": "playgentic",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Scaffold an opinionated Playwright-BDD test suite, with optional agent harness for Claude Code, GitHub Copilot and Codex.",
   "type": "module",
   "bin": {
