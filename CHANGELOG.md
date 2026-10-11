@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-The scaffold and the agents are now separate products. playgentic scaffolds the suite, and the agents live in the [playgentic-agents](https://github.com/BlaiseMoses01/playgentic-agents) plugin for Claude Code, GitHub Copilot and Codex.
+The scaffold and the agents are now separate products. playgentic scaffolds the suite, and the agents live in the [playgentic-agents](https://github.com/playgentic/playgentic-agents) plugin for Claude Code, GitHub Copilot and Codex.
 
 ### Added
 
@@ -38,11 +38,12 @@ The scaffold and the agents are now separate products. playgentic scaffolds the 
 - **`playgentic sync`** is gone. Plugins update through their marketplaces, so there is nothing to sync.
 - **The `.agent-sessions/` model** is gone, including the `agent-session` Playwright project, the `test:agent`/`agent:new`/`agent:promote` scripts, and their helper scripts. The agents work on a feature branch (or a worktree) instead.
 - **`template/.mcp.json`** is gone. The plugin bundles the `playwright-test` MCP server.
-- **The docs site (`docs/`)** has moved to [playgentic-docs](https://github.com/BlaiseMoses01/playgentic-docs), served at https://blaisemoses01.github.io/playgentic-docs/, and `homepage` points there. This package is now dedicated to the suite scaffold.
+- **The docs site (`docs/`)** has moved to its own repo, [playgentic-docs](https://github.com/playgentic/playgentic-docs). This package is now dedicated to the suite scaffold, and `homepage` points at the README.
 - **The step wiki in `docs/`** is gone. It now lives in `.playgentic/wiki/`.
 
 ### Changed
 
+- The repo moved to the [playgentic GitHub org](https://github.com/playgentic). `--agents` now points at `playgentic/playgentic-agents`.
 - The `AGENTS.md` block written by `--agents` now points coding agents at `.playgentic/wiki/` instead of embedding the conventions.
 - The README and template README describe the new split and the wiki.
 
@@ -111,5 +112,5 @@ Everything below is part of this initial release.
 - MIT license, `README.md`, and the `docs/agent-design.md` design doc (component map, the
   gen/heal loops, runner isolation, and the sync model).
 
-[Unreleased]: https://github.com/BlaiseMoses01/playgentic/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/BlaiseMoses01/playgentic/releases/tag/v0.1.0
+[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/playgentic/playgentic/releases/tag/v0.1.0

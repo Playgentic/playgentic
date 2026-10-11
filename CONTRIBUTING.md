@@ -1,6 +1,6 @@
 # Contributing
 
-`playgentic` is the npm scaffolder for an opinionated Playwright-BDD suite. The agents live in [playgentic-agents](https://github.com/BlaiseMoses01/playgentic-agents), and the docs site in [playgentic-docs](https://github.com/BlaiseMoses01/playgentic-docs).
+`playgentic` is the npm scaffolder for an opinionated Playwright-BDD suite. The agents live in [playgentic-agents](https://github.com/playgentic/playgentic-agents), and the docs site in [playgentic-docs](https://github.com/playgentic/playgentic-docs).
 
 ## Layout
 

@@ -1,6 +1,6 @@
 # playgentic
 
-Scaffold an opinionated [Playwright-BDD](https://github.com/vitalets/playwright-bdd) test suite. You can also wire in the [playgentic agents](https://github.com/BlaiseMoses01/playgentic-agents) harness for **Claude Code**, **GitHub Copilot** and/or **Codex** at the same time, the same way Playwright's own `init-agents` works.
+Scaffold an opinionated [Playwright-BDD](https://github.com/vitalets/playwright-bdd) test suite. You can also wire in the [playgentic agents](https://github.com/playgentic/playgentic-agents) harness for **Claude Code**, **GitHub Copilot** and/or **Codex** at the same time, the same way Playwright's own `init-agents` works.
 
 ## Quick start
 
@@ -53,7 +53,7 @@ npx playgentic init .
 
   Every write is a merge. Existing keys are kept, and re-running is a no-op. Use `--agents-ref <tag>` to pin the agents to a release.
 
-The agents themselves live in [playgentic-agents](https://github.com/BlaiseMoses01/playgentic-agents) and update through each harness's plugin marketplace. Nothing is copied into your repo, so there's nothing to sync.
+The agents themselves live in [playgentic-agents](https://github.com/playgentic/playgentic-agents) and update through each harness's plugin marketplace. Nothing is copied into your repo, so there's nothing to sync.
 
 ## Requirements
 

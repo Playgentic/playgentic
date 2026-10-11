@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PKG = join(ROOT, "package.json");
 const CHANGELOG = join(ROOT, "CHANGELOG.md");
-const REPO_URL = "https://github.com/BlaiseMoses01/playgentic";
+const REPO_URL = "https://github.com/playgentic/playgentic";
 
 const die = (msg) => {
   console.error(`release: ${msg}`);

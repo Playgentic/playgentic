@@ -14,7 +14,7 @@ export const PROVIDERS = ["claude", "copilot", "codex"];
 
 const MARKETPLACE = "playgentic";
 const PLUGIN = "playgentic";
-const REPO = "BlaiseMoses01/playgentic-agents";
+const REPO = "playgentic/playgentic-agents";
 const PLUGIN_ID = `${PLUGIN}@${MARKETPLACE}`;
 
 /** Parse "claude,codex" (or "all") into a validated provider list. */

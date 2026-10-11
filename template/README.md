@@ -2,7 +2,7 @@
 
 A [playwright-bdd](https://github.com/vitalets/playwright-bdd) test suite scaffolded with
 [playgentic](https://www.npmjs.com/package/playgentic). Optionally wired for the
-[playgentic agents](https://github.com/BlaiseMoses01/playgentic-agents), which write and heal tests for you
+[playgentic agents](https://github.com/playgentic/playgentic-agents), which write and heal tests for you
 in Claude Code, GitHub Copilot or Codex.
 
 ## Setup
@@ -98,7 +98,7 @@ When("I add the item to my cart", async ({ page }) => { /* ... */ });
 ## The agent pipeline
 
 Wired with `--agents` (or `npx playgentic agents <list>` later). This enables the
-[playgentic agents](https://github.com/BlaiseMoses01/playgentic-agents) plugin for each harness you picked:
+[playgentic agents](https://github.com/playgentic/playgentic-agents) plugin for each harness you picked:
 
 | Harness | Wiring | Run |
 | --- | --- | --- |
