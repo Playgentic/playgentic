@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Changed
+
+- **Marketplaces are referenced by full GitHub URL.** Claude Code's `.claude/settings.json` now registers the agents marketplace as a `git` source (`https://github.com/playgentic/playgentic-agents.git`) instead of the `owner/repo` shorthand, and the printed Copilot hint uses `copilot plugin marketplace add https://github.com/playgentic/playgentic-agents`.
+- The agents plugin now bundles the generic Playwright MCP (`npx @playwright/mcp@latest`) instead of `playwright-test`.
 
 ## [0.3.1] - 2026-10-11
 

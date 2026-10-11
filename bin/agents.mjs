@@ -15,6 +15,8 @@ export const PROVIDERS = ["claude", "copilot", "codex"];
 const MARKETPLACE = "playgentic";
 const PLUGIN = "playgentic";
 const REPO = "playgentic/playgentic-agents";
+// Marketplaces outside Claude's official one must be added by their full git URL.
+const REPO_URL = `https://github.com/${REPO}`;
 const PLUGIN_ID = `${PLUGIN}@${MARKETPLACE}`;
 
 /** Parse "claude,codex" (or "all") into a validated provider list. */
@@ -144,7 +146,7 @@ function claude(target, log, ref) {
     ".claude/settings.json",
     {
       extraKnownMarketplaces: {
-        [MARKETPLACE]: { source: { source: "github", repo: REPO, ...(ref ? { ref } : {}) } },
+        [MARKETPLACE]: { source: { source: "git", url: `${REPO_URL}.git`, ...(ref ? { ref } : {}) } },
       },
       enabledPlugins: { [PLUGIN_ID]: true },
     },
@@ -170,7 +172,7 @@ function copilot(target, log, ref) {
     },
     log,
   );
-  return [`Copilot CLI: copilot plugin marketplace add ${REPO} && copilot plugin install ${PLUGIN_ID}`];
+  return [`Copilot CLI: copilot plugin marketplace add ${REPO_URL} && copilot plugin install ${PLUGIN_ID}`];
 }
 
 function codex(target, log, ref) {
@@ -187,7 +189,7 @@ function codex(target, log, ref) {
       [
         `[marketplaces.${MARKETPLACE}]`,
         `source_type = "git"`,
-        `source = "https://github.com/${REPO}.git"`,
+        `source = "${REPO_URL}.git"`,
         ...(ref ? [`ref = "${ref}"`] : []),
       ].join("\n"),
     );

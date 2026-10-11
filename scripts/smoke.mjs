@@ -97,7 +97,7 @@ try {
 
   const claude = json(agents, ".claude/settings.json");
   if (claude.enabledPlugins?.["playgentic@playgentic"] !== true) throw new Error("claude plugin not enabled");
-  if (!claude.extraKnownMarketplaces?.playgentic?.source?.repo) throw new Error("claude marketplace missing");
+  if (!claude.extraKnownMarketplaces?.playgentic?.source?.url) throw new Error("claude marketplace missing");
   if (json(agents, ".github/copilot/settings.json").enabledPlugins?.["playgentic@playgentic"] !== true) {
     throw new Error("copilot plugin not enabled");
   }
