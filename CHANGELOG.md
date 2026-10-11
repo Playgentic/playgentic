@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Planned as `0.2.0`. The scaffold and the agents are now separate products. playgentic scaffolds the suite, and the agents live in the [playgentic-agents](https://github.com/BlaiseMoses01/playgentic-agents) plugin for Claude Code, GitHub Copilot and Codex.
+The scaffold and the agents are now separate products. playgentic scaffolds the suite, and the agents live in the [playgentic-agents](https://github.com/BlaiseMoses01/playgentic-agents) plugin for Claude Code, GitHub Copilot and Codex.
 
 ### Added
 
@@ -27,6 +27,7 @@ Planned as `0.2.0`. The scaffold and the agents are now separate products. playg
     - `pages.md`, a new page-object index built from exported classes under `tests/pages/` and their public members
   - Only marker-carrying generated files are ever rewritten or pruned. The agents read the wiki at runtime, so plugin updates never overwrite customisations.
 - **Page objects:** the template now ships `tests/pages/BasePage.ts`, and the example step uses it.
+- **Release tooling.** A repo-local `/release` skill proposes the version, bumps it, tags and pushes. The tag-triggered `release.yml` re-runs CI, creates the GitHub release from the changelog, and publishes to npm. It replaces `publish.yml`.
 - **Smoke test** covers:
   - the `--agents all` wiring, idempotency, preserving user content, and rejecting unknown providers
   - wiki generation, and that wiki re-runs never touch user files

@@ -55,10 +55,6 @@ npx playgentic init .
 
 The agents themselves live in [playgentic-agents](https://github.com/BlaiseMoses01/playgentic-agents) and update through each harness's plugin marketplace. Nothing is copied into your repo, so there's nothing to sync.
 
-## Docs
-
-Guides, the template walkthrough, and a playground app to point the agents at: https://blaisemoses01.github.io/playgentic-docs/
-
 ## Requirements
 
 - Node >= 18
