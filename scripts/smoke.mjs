@@ -48,7 +48,16 @@ try {
     "scripts/gen-wiki.mjs",
     ".gitignore",
     "package.json",
+    ".husky/pre-commit",
+    ".github/workflows/lint.yml",
+    ".github/workflows/playwright.yml",
   ]);
+  // Broadly usable: no vendor- or editor-specific extras.
+  assertFiles(
+    plain,
+    [".github/dependabot.yml", ".github/workflows/codeql.yml", ".github/workflows/gitleaks.yml", ".vscode"],
+    { absent: true },
+  );
   assertFiles(plain, [...AGENT_FILES, ".claude", ".mcp.json"], { absent: true });
 
   // These run on plain node — prove the template's tooling is coherent.

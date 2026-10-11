@@ -36,7 +36,10 @@ npx playgentic init .
   - a scenario-scoped `world` fixture
   - a husky pre-commit hook
   - eslint and prettier
-  - GitHub CI, CodeQL, gitleaks and dependabot
+  - a pre-commit hook that runs prettier and eslint on staged files, plus the docstring lint and typecheck
+  - two GitHub Actions workflows:
+    - **Lint:** prettier, eslint, docstring lint and typecheck
+    - **Playwright:** runs the desktop and mobile suites against the app at the `TARGET_URL` repo secret
 - **Suite wiki** in `.playgentic/wiki/`:
   - **`CONVENTIONS.md`:** your coding style and testing expectations (UI, API, locators, page objects, data).
   - **`extensions/<agent>.md`:** rules that extend or override each playgentic agent.
@@ -57,7 +60,7 @@ The agents themselves live in [playgentic-agents](https://github.com/playgentic/
 
 ## Requirements
 
-- Node >= 18
+- Node >= 22.22.1 (required by the scaffolded suite's tooling)
 - For the agents: Claude Code, GitHub Copilot CLI, or Codex with plugin support
 
 ## License

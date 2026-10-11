@@ -1,0 +1,60 @@
+name: Playwright
+
+# Runs the desktop and mobile suites against the app at the TARGET_URL repo
+# secret (Settings → Secrets and variables → Actions). Optional STANDARD_USER /
+# STANDARD_PASS secrets are passed through for steps that sign in.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, mobile]
+    env:
+      TARGET_URL: ${{ secrets.TARGET_URL }}
+      STANDARD_USER: ${{ secrets.STANDARD_USER }}
+      STANDARD_PASS: ${{ secrets.STANDARD_PASS }}
+    steps:
+      - name: Require the TARGET_URL secret
+        run: |
+          if [ -z "$TARGET_URL" ]; then
+            echo "::error::Set the TARGET_URL repository secret to the base URL of the app under test."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run ${{ matrix.project }} suite
+        # --pass-with-no-tests: a device with no tagged scenarios yet is fine, not a failure.
+        run: npx bddgen && npx playwright test --project ${{ matrix.project }} --pass-with-no-tests
+
+      - name: Upload report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: test-artifacts/
+          retention-days: 14

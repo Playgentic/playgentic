@@ -54,7 +54,7 @@ It starts with the scaffold's defaults. Edit, delete or extend freely.
 
 ## Tagging and running
 
-- Device projects are `desktop` and `mobile`. Tag scenarios with `@desktop` and/or `@mobile`.
+- Device projects are `desktop` and `mobile`, and each one only runs scenarios tagged with its name. Every scenario needs `@desktop`, `@mobile`, or both; a scenario with neither never runs.
 - Run everything with `npm test`. Run one scenario with `npx bddgen && npx playwright test --grep "<tag or title>"`, adding `--project desktop` for a quicker loop.
 - `TARGET_URL` comes from `.env`.
 - <!-- smoke/regression tag conventions, ticket tags... -->

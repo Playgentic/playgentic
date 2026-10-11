@@ -7,7 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **Two template CI workflows:**
+  - `lint.yml` runs prettier, eslint, the step docstring lint and the typecheck.
+  - `playwright.yml` runs the `desktop` and `mobile` suites against the `TARGET_URL` repo secret (with optional `STANDARD_USER`/`STANDARD_PASS`) and uploads a report per project.
+
+### Changed
+
+- **The template ships formatter-clean:** a fresh scaffold passes its own `format:check`, `lint`, `lint:steps` and `typecheck`.
+- **Pre-commit** runs prettier and eslint on staged files (via lint-staged), then the docstring lint and typecheck.
+- **`slowMo`** is off for the desktop project in CI.
+- **Device tags now filter projects.** Each device project only runs scenarios tagged with its name: `@desktop` in `desktop`, `@mobile` in `mobile`, both tags in both. Previously every scenario ran in every project, whatever its tags.
+  - Untagged scenarios no longer run, so add `@desktop` and/or `@mobile` to existing scenarios.
+  - The example feature now has a scenario for each device.
+  - The Playwright CI job passes `--pass-with-no-tests`, so a device with no scenarios yet doesn't fail.
+
+- **Dependencies updated** for scaffolded suites:
+  - `@playwright/test` 1.64
+  - `playwright-bdd` 9.2.1
+  - `eslint` 10.12
+  - `typescript-eslint` 8.71
+  - `prettier` 3.9.10
+  - `lint-staged` 17.6
+  - `@types/node` 26.6
+  - `dotenv` 18. Only `node -r dotenv/config` preloading was removed; the suite's `import "dotenv/config"` is unaffected.
+- **TypeScript pinned to `~6.0.3`.** `typescript-eslint` supports `<6.1`, and TypeScript 7 (the native port) has no stable JS API yet, so it stays on 6.0.x until typescript-eslint supports it.
+- **Node ≥ 22.22.1 is now required**, by both the CLI and scaffolded suites (`engines`). `lint-staged` 17.6 requires it, and Node 18 and 20 are end-of-life. The repo's own CI runs on Node 22.
+- **GitHub Actions updated:** the template workflows use `checkout`/`setup-node`/`upload-artifact` `@v7`, and the repo's own workflows are pinned to `checkout` v7.0.1 and `setup-node` v7.1.0.
+
+### Fixed
+
+- **`report:cucumber`** now opens `test-artifacts/cucumber-report.html` (it pointed at a folder that doesn't exist).
+
+### Removed
+
+- **The unused `dotenv` devDependency** from the CLI package.
+- **Vendor- and editor-specific template files:**
+  - dependabot
+  - the gitleaks config and workflow
+  - CodeQL
+  - the pull request template
+  - `.vscode/`
+  - the disabled commitlint `commit-msg` hook
+- **Template `ci.yml`**, replaced by `lint.yml`.
 
 ## [0.2.0] - 2026-10-11
 

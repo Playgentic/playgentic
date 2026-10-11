@@ -9,14 +9,19 @@ function required(name: string): string {
 }
 
 /*
- *workaround pattern for multiple devices... limitation of playwright-bdd config logic.
- *you can add more or less devices from any of Playwrights options here and pass as a flag
+ * One Playwright project per device target (a workaround for playwright-bdd's
+ * single-device config). Add any Playwright device here.
+ *
+ * Each project only runs scenarios tagged with its name: `@desktop` scenarios run
+ * in the desktop project, `@mobile` in mobile, and both tags run in both. A
+ * scenario with neither tag runs nowhere.
  */
 const targets = [
   {
     name: "desktop",
     device: "Desktop Chrome",
-    use: { launchOptions: { slowMo: 1500 } },
+    // Slowed down for watching runs locally; full speed in CI.
+    use: { launchOptions: { slowMo: process.env.CI ? 0 : 1500 } },
   },
   { name: "mobile", device: "Pixel 7" },
 ];
@@ -47,6 +52,7 @@ export default defineConfig({
         steps: ["tests/baseTest.ts", "tests/steps/**/*.steps.ts"],
         aiFix: { promptAttachment: true },
         missingSteps: "fail-on-gen",
+        tags: `@${name}`,
       }),
       use: { ...devices[device], ...(use ?? {}) },
     })),

@@ -1,4 +1,4 @@
-import {Given, expect} from "../baseTest" 
+import { Given, expect } from "../baseTest";
 import { BasePage } from "../pages/BasePage";
 import "dotenv/config";
 
@@ -8,7 +8,7 @@ import "dotenv/config";
  * @prereq none
  * @uses page, baseURL
  */
-Given("I navigate to path {string}", async({page, baseURL}, target: string) => {
-    await new BasePage(page).goto(baseURL + target);
-    expect(page.url()).toContain(baseURL+target); 
+Given("I navigate to path {string}", async ({ page, baseURL }, target: string) => {
+  await new BasePage(page).goto(baseURL + target);
+  expect(page.url()).toContain(baseURL + target);
 });

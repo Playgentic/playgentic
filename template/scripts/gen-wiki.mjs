@@ -51,7 +51,11 @@ function userFiles() {
     ? readdirSync(WIKI).filter((f) => f.endsWith(".md") && isUser(join(WIKI, f)))
     : [];
   const extDir = join(WIKI, "extensions");
-  const ext = existsSync(extDir) ? readdirSync(extDir).filter((f) => f.endsWith(".md")).map((f) => `extensions/${f}`) : [];
+  const ext = existsSync(extDir)
+    ? readdirSync(extDir)
+        .filter((f) => f.endsWith(".md"))
+        .map((f) => `extensions/${f}`)
+    : [];
   return [...root.sort(), ...ext.sort()];
 }
 
@@ -59,9 +63,14 @@ function renderIndex(groups, pages, stepCount) {
   const own = userFiles();
   const ownRows = own.length ? own.map((f) => `- [${f}](./${f})`).join("\n") : "_none yet_";
   const domainRows = [...groups.entries()]
-    .map(([domain, steps]) => `| ${domain} | ${steps.length} | [steps/${slugify(domain)}.md](./steps/${slugify(domain)}.md) |`)
+    .map(
+      ([domain, steps]) =>
+        `| ${domain} | ${steps.length} | [steps/${slugify(domain)}.md](./steps/${slugify(domain)}.md) |`,
+    )
     .join("\n");
-  const pageRows = pages.map((p) => `| [${p.name}](./pages.md#${p.name.toLowerCase()}) | ${p.summary || "—"} |`).join("\n");
+  const pageRows = pages
+    .map((p) => `| [${p.name}](./pages.md#${p.name.toLowerCase()}) | ${p.summary || "—"} |`)
+    .join("\n");
 
   return `${MARKER}
 
@@ -121,7 +130,12 @@ function renderPages(pages) {
       const members = p.members.length
         ? p.members
             .map((m) => {
-              const sig = m.kind === "method" ? `${m.async ? "async " : ""}${m.name}()` : m.kind === "getter" ? `get ${m.name}` : m.name;
+              const sig =
+                m.kind === "method"
+                  ? `${m.async ? "async " : ""}${m.name}()`
+                  : m.kind === "getter"
+                    ? `get ${m.name}`
+                    : m.name;
               return `- \`${sig}\`${m.summary ? ` — ${m.summary}` : ""}`;
             })
             .join("\n")
@@ -167,7 +181,8 @@ function main() {
     writeFileSync(path, content);
     written.add(path);
   };
-  for (const [domain, domainSteps] of groups) write(join(STEPS_DIR, `${slugify(domain)}.md`), renderDomain(domain, domainSteps));
+  for (const [domain, domainSteps] of groups)
+    write(join(STEPS_DIR, `${slugify(domain)}.md`), renderDomain(domain, domainSteps));
   write(join(WIKI, "pages.md"), renderPages(pages));
   write(join(WIKI, "index.md"), renderIndex(groups, pages, steps.length));
   prune(STEPS_DIR, written);

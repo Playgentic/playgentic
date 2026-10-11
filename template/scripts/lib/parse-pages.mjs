@@ -12,7 +12,8 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 
-const CLASS_RE = /^export\s+(?:default\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+([\w.]+))?[^{]*\{/gm;
+const CLASS_RE =
+  /^export\s+(?:default\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+([\w.]+))?[^{]*\{/gm;
 
 // A class member at the start of a line: optional modifiers, then a name followed
 // by `(` (method/getter) or `:`/`=` (property). Private and #private are skipped.

@@ -1,3 +1,0 @@
-# Disabled for now — commitlint message enforcement turned off.
-# Re-enable by uncommenting the line below:
-# npx commitlint --edit $1

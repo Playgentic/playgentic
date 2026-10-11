@@ -13,7 +13,7 @@
     "wiki": "node scripts/gen-wiki.mjs",
     "lint:steps": "node scripts/lint-steps.mjs",
     "report:playwright": "playwright show-report test-artifacts/playwright-report",
-    "report:cucumber": "npx http-server .artifacts/cucumber-report -c-1 -a localhost -o index.html",
+    "report:cucumber": "npx http-server test-artifacts -c-1 -a localhost -o cucumber-report.html",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
@@ -31,18 +31,21 @@
   "author": "Blaise Moses",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=22.22.1"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.61.1",
-    "@types/node": "^26.1.1",
-    "dotenv": "^17.4.2",
-    "eslint": "^10.7.0",
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^26.6.5",
+    "dotenv": "^18.0.7",
+    "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.8",
-    "playwright-bdd": "^9.2.0",
-    "prettier": "^3.9.5",
-    "typescript": "^6.0.0",
-    "typescript-eslint": "^8.64.0"
+    "lint-staged": "^17.6.0",
+    "playwright-bdd": "^9.2.1",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.1"
   }
 }
