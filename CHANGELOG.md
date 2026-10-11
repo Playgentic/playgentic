@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.3.1] - 2026-10-11
+
 ### Fixed
 
 - **The Claude Code install hint printed by `--agents` / `playgentic agents`** used a `--marketplace` flag that Claude Code doesn't have. It now says `claude plugin install playgentic@playgentic --scope project`. The READMEs also note that writing the settings doesn't install the plugin: each user accepts the install prompt or runs that command once.
@@ -165,7 +169,8 @@ Everything below is part of this initial release.
 - MIT license, `README.md`, and the `docs/agent-design.md` design doc (component map, the
   gen/heal loops, runner isolation, and the sync model).
 
-[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/playgentic/playgentic/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/playgentic/playgentic/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/playgentic/playgentic/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/playgentic/playgentic/releases/tag/v0.1.0
