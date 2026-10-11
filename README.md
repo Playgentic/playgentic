@@ -1,62 +1,69 @@
 # playgentic
 
-Scaffold an agentic [Playwright-BDD](https://github.com/vitalets/playwright-bdd) test suite with my 
-[Claude Code](https://claude.ai/code) agent workflows and agents for test automation. I update the agents here as I improve them so they can be easily synced by consumers.
+Scaffold an opinionated [Playwright-BDD](https://github.com/vitalets/playwright-bdd) test suite. You can also wire in the [playgentic agents](https://github.com/BlaiseMoses01/playgentic-agents) harness for **Claude Code**, **GitHub Copilot** and/or **Codex** at the same time, the same way Playwright's own `init-agents` works.
 
 ## Quick start
 
-Scaffold a new suite:
+Scaffold a new suite with agents:
 
 ```bash
-npx playgentic init my-suite
+npx playgentic init my-suite --agents claude,copilot,codex   # any subset, or "all"
 cd my-suite
 cp .env.example .env        # set TARGET_URL to your app
 npx playwright install
-npm run wiki                # generate the step wiki under docs/
+npm run wiki                # index steps + page objects into .playgentic/wiki/
 npm test                    # run the example scenario
 ```
 
-Add the suite to an **existing** project (merges into your `package.json`, never clobbers it):
+Leave out `--agents` for just the suite. You can add agents later from the project root:
+
+```bash
+npx playgentic agents claude
+```
+
+Add the suite to an **existing** project. It merges into your `package.json` and never clobbers it:
 
 ```bash
 cd my-existing-app
 npx playgentic init .
 ```
 
-## Keeping agents up to date
-
-The agent definitions (`.claude/skills`, `.claude/agents`) are managed by playgentic. When this
-package ships a new version, pull the changes into any scaffolded project:
-
-```bash
-npx playgentic sync          # overwrite managed agent defs to the newest version
-npx playgentic sync --dry    # preview what would change
-```
-
-`sync` overwrites `.claude/skills` and `.claude/agents`, but never touches `.claude/rules`
-(e.g. `code-styles.md`) or your own added skills/agents — those are yours.
-
 ## What you get
 
-- **BDD suite** — a basic `playwright-bdd` boiler with `desktop`/`mobile` projects, an example feature + step,
-  a scenario-scoped `world` fixture, a husky pre-commit hook, and linting and formatting via eslint/prettier.
-- **Step wiki** — `npm run wiki` parses the `@domain/@description/@prereq/@uses` docstrings on
-  every step and generates a browsable catalogue under `docs/`.
-- **Docstring lint** — `npm run lint:steps` (in pre-commit) fails if any step lacks a compliant
-  docstring, this will keep your test architecture indexed into the generated wiki each time.
-- **Agent pipeline** — Claude Code skills (`/bdd-pipeline --gen|--heal`) that scaffold work in an
-  isolated `.agent-sessions/` session, drive an explorer subagent against a dedicated
-  `agent-session` Playwright runner, review with an auditor, and promote into your suite only on
-  approval. Requires the `playwright-test` MCP server.
+- **BDD suite.** A `playwright-bdd` boilerplate with:
+  - `desktop` and `mobile` projects
+  - an example feature and step
+  - a scenario-scoped `world` fixture
+  - a husky pre-commit hook
+  - eslint and prettier
+  - GitHub CI, CodeQL, gitleaks and dependabot
+- **Suite wiki** in `.playgentic/wiki/`:
+  - **`CONVENTIONS.md`:** your coding style and testing expectations (UI, API, locators, page objects, data).
+  - **`extensions/<agent>.md`:** rules that extend or override each playgentic agent.
+  - **Generated index:** `npm run wiki` builds an index of every step (from its `@domain/@description/@prereq/@uses` docstring) and every page object. It only ever rewrites its own generated files, so your edits survive both re-runs and agent plugin updates.
+- **Docstring lint.** `npm run lint:steps` runs in pre-commit and fails if any step lacks a compliant docstring, so the wiki always stays complete.
+- **Agent harness** (`--agents`). Makes the playgentic agents plugin available and enabled for each harness:
 
-See **[docs/agent-design.md](docs/agent-design.md)** for how the pipeline is designed — component
-map, the gen/heal loops, runner isolation, and the sync model, with diagrams.
+  | Harness | Files written |
+  | --- | --- |
+  | all | `.playgentic/config.json`, plus an `AGENTS.md` block pointing any coding agent at `.playgentic/wiki/` |
+  | `claude` | `.claude/settings.json` (marketplace + `enabledPlugins`), `CLAUDE.md` importing `AGENTS.md` |
+  | `copilot` | `.github/copilot/settings.json` |
+  | `codex` | `.codex/config.toml` (marketplace + enabled plugin; each user still runs `codex plugin add playgentic@playgentic` once) |
+
+  Every write is a merge. Existing keys are kept, and re-running is a no-op. Use `--agents-ref <tag>` to pin the agents to a release.
+
+The agents themselves live in [playgentic-agents](https://github.com/BlaiseMoses01/playgentic-agents) and update through each harness's plugin marketplace. Nothing is copied into your repo, so there's nothing to sync.
+
+## Docs
+
+Guides, the template walkthrough, and a playground app to point the agents at: https://blaisemoses01.github.io/playgentic-docs/
 
 ## Requirements
 
 - Node >= 18
-- For the agent pipeline: Claude Code with the `playwright-test` MCP server (wired in `.mcp.json`).
+- For the agents: Claude Code, GitHub Copilot CLI, or Codex with plugin support
 
 ## License
 
-MIT 
+MIT

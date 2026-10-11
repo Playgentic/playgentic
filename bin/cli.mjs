@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// playgentic — scaffold agentic Playwright-BDD suites and keep the Claude Code
-// agent definitions in sync. Zero runtime dependencies (Node built-ins only).
+// playgentic — scaffold an opinionated Playwright-BDD suite, and optionally wire the
+// playgentic agents plugin for Claude Code, GitHub Copilot and/or Codex.
+// Zero runtime dependencies (Node built-ins only).
 //
-//   playgentic init [dir] [--no-install]   scaffold a new suite (or add to an existing project)
-//   playgentic sync [--dry]                pull the latest agent definitions into .claude/
+//   playgentic init [dir] [--no-install] [--agents <list>] [--agents-ref <ref>]
+//   playgentic agents <list> [--agents-ref <ref>]   wire agents into an existing project
 //   playgentic --version | --help
 
 import { execSync } from "node:child_process";
@@ -11,19 +12,18 @@ import {
   cpSync,
   existsSync,
   mkdirSync,
-  readdirSync,
   readFileSync,
   renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
-import { basename, dirname, join, relative, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
+import { PROVIDERS, parseProviders, setupAgents } from "./agents.mjs";
 
 const PKG_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TEMPLATE_DIR = join(PKG_ROOT, "template");
-const ASSETS_CLAUDE = join(PKG_ROOT, "assets", "claude");
 
 const version = () =>
   JSON.parse(readFileSync(join(PKG_ROOT, "package.json"), "utf8")).version;
@@ -31,16 +31,6 @@ const version = () =>
 function die(msg) {
   console.error(`playgentic: ${msg}`);
   process.exit(1);
-}
-
-/** Recursively list file paths under `dir`, relative to it. */
-function listFiles(dir, base = dir, out = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) listFiles(full, base, out);
-    else out.push(relative(base, full));
-  }
-  return out;
 }
 
 // ---------------------------------------------------------------- init
@@ -52,7 +42,7 @@ function init(args) {
     existsSync(join(target, "playwright.config.js"))
   ) {
     die(
-      `${target} already looks like a Playwright project. Use \`playgentic sync\` to update agents instead.`,
+      `${target} already looks like a Playwright project. To add agents to it, run \`playgentic agents <${PROVIDERS.join("|")}>\` there.`,
     );
   }
   mkdirSync(target, { recursive: true });
@@ -72,9 +62,6 @@ function init(args) {
     else renameSync(shipped, dotted);
   }
 
-  // Layer the managed agent assets into .claude/ (alongside the template's settings).
-  cpSync(ASSETS_CLAUDE, join(target, ".claude"), { recursive: true });
-
   writePackageJson(target, hadPackageJson);
 
   console.log(`\nScaffolded playgentic suite into ${target}`);
@@ -86,12 +73,35 @@ function init(args) {
       /* husky setup will just warn if git is unavailable */
     }
   }
+
+  // After git init, so the config picks up the real default branch.
+  const followUps = args.agents ? wireAgents(target, args.agents, args.values["agents-ref"]) : [];
+
   if (!args.values["no-install"]) {
     console.log("Installing dependencies...");
     execSync("npm install", { cwd: target, stdio: "inherit" });
   }
 
-  printNextSteps(args.positionals[0] ?? ".", args.values["no-install"]);
+  printNextSteps(args.positionals[0] ?? ".", args.values["no-install"], followUps);
+}
+
+function wireAgents(target, providers, ref) {
+  console.log(`\nWiring playgentic agents for: ${providers.join(", ")}`);
+  return setupAgents(target, providers, { ref });
+}
+
+// ---------------------------------------------------------------- agents
+
+function agents(args) {
+  const list = args.positionals[0];
+  if (!list) die(`usage: playgentic agents <${PROVIDERS.join(",")}|all> [--agents-ref <ref>]`);
+  const followUps = wireAgents(process.cwd(), parseProviders(list), args.values["agents-ref"]);
+  printFollowUps(followUps);
+}
+
+function printFollowUps(followUps) {
+  if (!followUps.length) return;
+  console.log(["", "To finish enabling the agents:", ...followUps.map((l) => `  ${l}`), ""].join("\n"));
 }
 
 function writePackageJson(target, hadPackageJson) {
@@ -122,7 +132,7 @@ function writePackageJson(target, hadPackageJson) {
   console.log("  merged playgentic scripts + devDependencies into your package.json");
 }
 
-function printNextSteps(dir, noInstall) {
+function printNextSteps(dir, noInstall, followUps) {
   const lines = [
     "",
     "Next steps:",
@@ -133,57 +143,10 @@ function printNextSteps(dir, noInstall) {
     "  npm run wiki              # generate the step wiki",
     "  npm test                  # run the example scenario",
     "",
-    "Update agent definitions later with:  npx playgentic sync",
-    "",
+    ...(followUps.length ? [] : [`Add the agent harness any time with:  npx playgentic agents <${PROVIDERS.join(",")}>`, ""]),
   ];
   console.log(lines.join("\n"));
-}
-
-// ---------------------------------------------------------------- sync
-
-function sync(args) {
-  const cwd = process.cwd();
-  if (!existsSync(join(cwd, ".claude"))) {
-    die("no .claude/ here — run from a playgentic project root, or scaffold with `playgentic init`.");
-  }
-  const dry = Boolean(args.values.dry);
-  let changed = 0;
-
-  // Fully managed — always overwrite to the shipped version.
-  for (const sub of ["skills", "agents"]) {
-    changed += syncDir(join(ASSETS_CLAUDE, sub), join(cwd, ".claude", sub), true, dry);
-  }
-  // Rules are yours to edit (e.g. code-styles.md) — only add missing files, never overwrite.
-  changed += syncDir(join(ASSETS_CLAUDE, "rules"), join(cwd, ".claude", "rules"), false, dry);
-
-  if (changed === 0) {
-    console.log(`Already up to date with playgentic v${version()}.`);
-  } else if (dry) {
-    console.log(`\n${changed} file(s) would change (playgentic v${version()}). Re-run without --dry to apply.`);
-  } else {
-    console.log(`\n✓ synced ${changed} file(s) from playgentic v${version()}.`);
-  }
-}
-
-/** Copy managed files from srcDir into destDir; returns the count that changed. */
-function syncDir(srcDir, destDir, overwrite, dry) {
-  if (!existsSync(srcDir)) return 0;
-  let changed = 0;
-  for (const rel of listFiles(srcDir)) {
-    const src = join(srcDir, rel);
-    const dest = join(destDir, rel);
-    const exists = existsSync(dest);
-    if (exists && !overwrite) continue; // preserve user-owned file
-    const next = readFileSync(src);
-    if (exists && readFileSync(dest).equals(next)) continue; // identical
-    changed++;
-    console.log(`  ${dry ? "would " : ""}${exists ? "update" : "add"}: ${relative(process.cwd(), dest)}`);
-    if (!dry) {
-      mkdirSync(dirname(dest), { recursive: true });
-      writeFileSync(dest, next);
-    }
-  }
-  return changed;
+  printFollowUps(followUps);
 }
 
 // ---------------------------------------------------------------- cli
@@ -192,10 +155,15 @@ function printHelp() {
   console.log(`playgentic v${version()} — agentic Playwright-BDD scaffolder
 
 Usage:
-  playgentic init [dir] [--no-install]   Scaffold a suite into dir (default: .).
-                                         Merges into an existing package.json.
-  playgentic sync [--dry]                Update .claude/ agent definitions to this
-                                         package's version. --dry previews changes.
+  playgentic init [dir] [--no-install] [--agents <list>]
+                         Scaffold a suite into dir (default: .). Merges into an
+                         existing package.json. --agents also wires the agent
+                         harness (same as running \`playgentic agents\` after).
+  playgentic agents <list>
+                         Wire the playgentic agents plugin into the current project.
+                         <list> is comma-separated: ${PROVIDERS.join(", ")}, or all.
+  Options:
+    --agents-ref <ref>   Pin the agents marketplace to a git tag or branch.
   playgentic --version
   playgentic --help`);
 }
@@ -205,7 +173,8 @@ function main() {
     allowPositionals: true,
     options: {
       "no-install": { type: "boolean" },
-      dry: { type: "boolean" },
+      agents: { type: "string" },
+      "agents-ref": { type: "string" },
       version: { type: "boolean", short: "v" },
       help: { type: "boolean", short: "h" },
     },
@@ -216,9 +185,14 @@ function main() {
   if (args.values.help || !cmd) return void printHelp();
 
   const rest = { values: args.values, positionals: args.positionals.slice(1) };
+  try {
+    if (args.values.agents !== undefined) rest.agents = parseProviders(args.values.agents);
+  } catch (err) {
+    die(err.message);
+  }
   if (cmd === "init") init(rest);
-  else if (cmd === "sync") sync(rest);
-  else die(`unknown command "${cmd}". Try: playgentic init | sync | --help`);
+  else if (cmd === "agents") agents(rest);
+  else die(`unknown command "${cmd}". Try: playgentic init | agents | --help`);
 }
 
 main();

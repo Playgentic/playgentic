@@ -7,13 +7,12 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   prettier,
   {
-    // Generated output and agent scratch space are never hand-authored source.
+    // Generated output is never hand-authored source.
     ignores: [
       "node_modules/",
       "results/",
       "dist/",
       ".features-gen/",
-      ".agent-sessions/",
       "test-artifacts/",
       "test-results/",
       "playwright-report/",

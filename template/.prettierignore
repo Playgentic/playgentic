@@ -3,7 +3,8 @@ results
 dist
 *.feature
 
-# generated / ephemeral output
-docs
+# generated / ephemeral output (npm run wiki)
+.playgentic/wiki/index.md
+.playgentic/wiki/pages.md
+.playgentic/wiki/steps
 .features-gen
-.agent-sessions

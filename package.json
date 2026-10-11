@@ -1,7 +1,7 @@
 {
   "name": "playgentic",
   "version": "0.1.0",
-  "description": "Scaffold agentic Playwright-BDD test suites and keep your Claude Code agent definitions in sync.",
+  "description": "Scaffold an opinionated Playwright-BDD test suite, with optional agent harness for Claude Code, GitHub Copilot and Codex.",
   "type": "module",
   "bin": {
     "playgentic": "bin/cli.mjs"
@@ -13,7 +13,6 @@
   },
   "files": [
     "bin",
-    "assets",
     "template"
   ],
   "engines": {
@@ -25,6 +24,8 @@
     "bdd",
     "cucumber",
     "claude-code",
+    "github-copilot",
+    "codex",
     "agentic-ai",
     "scaffold",
     "cli",
@@ -40,7 +41,7 @@
   "bugs": {
     "url": "https://github.com/BlaiseMoses01/playgentic/issues"
   },
-  "homepage": "https://blaisemoses01.github.io/playgentic-local/",
+  "homepage": "https://blaisemoses01.github.io/playgentic-docs/",
   "publishConfig": {
     "access": "public"
   },

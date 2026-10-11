@@ -21,31 +21,6 @@ const targets = [
   { name: "mobile", device: "Pixel 7" },
 ];
 
-/*
- * Dedicated agent-only runner. This project ONLY exists when AGENT_SESSION is set
- * (e.g. `AGENT_SESSION=2026-07-16-checkout npm run test:agent`), and it points the
- * feature/step globs exclusively at that ephemeral session under `.agent-sessions/`.
- * Normal `npm test` and CI never see it, and it can never touch prod `tests/`.
- */
-const AGENT_SESSION = process.env.AGENT_SESSION;
-const agentProjects = AGENT_SESSION
-  ? [
-      {
-        ...defineBddProject({
-          name: "agent-session",
-          features: `.agent-sessions/${AGENT_SESSION}/tests/features/**/*.feature`,
-          steps: [
-            `.agent-sessions/${AGENT_SESSION}/tests/baseTest.ts`,
-            `.agent-sessions/${AGENT_SESSION}/tests/steps/**/*.steps.ts`,
-          ],
-          aiFix: { promptAttachment: true },
-          missingSteps: "fail-on-gen",
-        }),
-        use: { ...devices["Desktop Chrome"] },
-      },
-    ]
-  : [];
-
 export default defineConfig({
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
@@ -75,6 +50,5 @@ export default defineConfig({
       }),
       use: { ...devices[device], ...(use ?? {}) },
     })),
-    ...agentProjects,
   ],
 });
