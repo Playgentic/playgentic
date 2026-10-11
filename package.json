@@ -36,12 +36,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/playgentic/playgentic.git"
+    "url": "git+https://github.com/Playgentic/playgentic.git"
   },
   "bugs": {
-    "url": "https://github.com/playgentic/playgentic/issues"
+    "url": "https://github.com/Playgentic/playgentic/issues"
   },
-  "homepage": "https://github.com/playgentic/playgentic#readme",
+  "homepage": "https://github.com/Playgentic/playgentic#readme",
   "publishConfig": {
     "access": "public"
   },
