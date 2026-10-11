@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.4.0] - 2026-10-11
+
 ### Changed
 
 - **Marketplaces are referenced by full GitHub URL.** Claude Code's `.claude/settings.json` now registers the agents marketplace as a `git` source (`https://github.com/playgentic/playgentic-agents.git`) instead of the `owner/repo` shorthand, and the printed Copilot hint uses `copilot plugin marketplace add https://github.com/playgentic/playgentic-agents`.
@@ -172,7 +176,8 @@ Everything below is part of this initial release.
 - MIT license, `README.md`, and the `docs/agent-design.md` design doc (component map, the
   gen/heal loops, runner isolation, and the sync model).
 
-[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/playgentic/playgentic/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/playgentic/playgentic/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/playgentic/playgentic/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/playgentic/playgentic/compare/v0.1.0...v0.2.0
