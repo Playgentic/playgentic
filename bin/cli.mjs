@@ -3,7 +3,7 @@
 // playgentic agents plugin for Claude Code, GitHub Copilot and/or Codex.
 // Zero runtime dependencies (Node built-ins only).
 //
-//   playgentic init [dir] [--no-install] [--agents <list>] [--agents-ref <ref>]
+//   playgentic init [dir] [--no-install] [--no-editor] [--agents <list>] [--agents-ref <ref>]
 //   playgentic agents <list> [--agents-ref <ref>]   wire agents into an existing project
 //   playgentic --version | --help
 
@@ -48,10 +48,11 @@ function init(args) {
   mkdirSync(target, { recursive: true });
   const hadPackageJson = existsSync(join(target, "package.json"));
 
-  // Copy the whole template except package.json (merged/written below).
+  // Copy the whole template except package.json and .vscode/ (both merged/written below).
+  const EDITOR_DIR = join(TEMPLATE_DIR, ".vscode");
   cpSync(TEMPLATE_DIR, target, {
     recursive: true,
-    filter: (src) => basename(src) !== "package.json",
+    filter: (src) => basename(src) !== "package.json" && src !== EDITOR_DIR,
   });
 
   // `gitignore` ships dotless so npm won't special-case it; restore the dot.
@@ -63,6 +64,7 @@ function init(args) {
   }
 
   writePackageJson(target, hadPackageJson);
+  if (!args.values["no-editor"]) writeEditorConfig(target);
 
   console.log(`\nScaffolded playgentic suite into ${target}`);
 
@@ -132,6 +134,43 @@ function writePackageJson(target, hadPackageJson) {
   console.log("  merged playgentic scripts + devDependencies into your package.json");
 }
 
+// VS Code + the official Cucumber extension: point it at the features and step glue so
+// steps resolve (go-to-definition, no "undefined step" squiggles). Merge-only, like the
+// agent wiring: an existing key or recommendation is never overwritten.
+function writeEditorConfig(target) {
+  const dir = join(target, ".vscode");
+  mkdirSync(dir, { recursive: true });
+
+  const merge = (file, apply) => {
+    const ours = JSON.parse(readFileSync(join(TEMPLATE_DIR, ".vscode", file), "utf8"));
+    const dest = join(dir, file);
+    let theirs = {};
+    if (existsSync(dest)) {
+      try {
+        theirs = JSON.parse(readFileSync(dest, "utf8"));
+      } catch {
+        // VS Code allows comments (JSONC); rather than risk rewriting it, leave it alone.
+        console.warn(`  ! left .vscode/${file} untouched (not plain JSON); see the template for the Cucumber keys`);
+        return;
+      }
+    }
+    writeFileSync(dest, JSON.stringify(apply(theirs, ours), null, 2) + "\n");
+  };
+
+  merge("settings.json", (theirs, ours) => {
+    for (const [key, val] of Object.entries(ours)) {
+      if (key === "files.associations") theirs[key] = { ...val, ...theirs[key] };
+      else theirs[key] ??= val;
+    }
+    return theirs;
+  });
+  merge("extensions.json", (theirs, ours) => {
+    const recs = theirs.recommendations ?? [];
+    for (const r of ours.recommendations) if (!recs.includes(r)) recs.push(r);
+    return { ...theirs, recommendations: recs };
+  });
+}
+
 function printNextSteps(dir, noInstall, followUps) {
   const lines = [
     "",
@@ -155,10 +194,11 @@ function printHelp() {
   console.log(`playgentic v${version()} — agentic Playwright-BDD scaffolder
 
 Usage:
-  playgentic init [dir] [--no-install] [--agents <list>]
+  playgentic init [dir] [--no-install] [--no-editor] [--agents <list>]
                          Scaffold a suite into dir (default: .). Merges into an
                          existing package.json. --agents also wires the agent
                          harness (same as running \`playgentic agents\` after).
+                         --no-editor skips the VS Code Cucumber config in .vscode/.
   playgentic agents <list>
                          Wire the playgentic agents plugin into the current project.
                          <list> is comma-separated: ${PROVIDERS.join(", ")}, or all.
@@ -173,6 +213,7 @@ function main() {
     allowPositionals: true,
     options: {
       "no-install": { type: "boolean" },
+      "no-editor": { type: "boolean" },
       agents: { type: "string" },
       "agents-ref": { type: "string" },
       version: { type: "boolean", short: "v" },

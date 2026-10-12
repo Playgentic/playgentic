@@ -52,12 +52,20 @@ try {
     ".github/workflows/lint.yml",
     ".github/workflows/playwright.yml",
   ]);
-  // Broadly usable: no vendor- or editor-specific extras.
+  // Broadly usable: no vendor-specific extras. The one editor extra (VS Code Cucumber glue)
+  // is on by default and opt-out with --no-editor.
   assertFiles(
     plain,
-    [".github/dependabot.yml", ".github/workflows/codeql.yml", ".github/workflows/gitleaks.yml", ".vscode"],
+    [".github/dependabot.yml", ".github/workflows/codeql.yml", ".github/workflows/gitleaks.yml"],
     { absent: true },
   );
+  assertFiles(plain, [".vscode/settings.json", ".vscode/extensions.json"]);
+  const vscode = json(plain, ".vscode/settings.json");
+  if (!vscode["cucumber.glue"]?.includes("tests/steps/**/*.steps.ts")) throw new Error("cucumber glue missing steps");
+  if (!vscode["cucumber.features"]?.includes("tests/features/**/*.feature")) throw new Error("cucumber features glob missing");
+  if (!json(plain, ".vscode/extensions.json").recommendations?.includes("cucumberopen.cucumber-official")) {
+    throw new Error("cucumber extension not recommended");
+  }
   assertFiles(plain, [...AGENT_FILES, ".claude", ".mcp.json"], { absent: true });
 
   // These run on plain node — prove the template's tooling is coherent.
@@ -89,6 +97,30 @@ try {
   });
   assertFiles(plain, [".playgentic/wiki/steps/old-domain.md"], { absent: true });
   if (!read(plain, ".playgentic/wiki/index.md").includes("NOTES.md")) throw new Error("index does not link user notes");
+
+  // --- --no-editor -----------------------------------------------------------
+  const noEditor = tmp();
+  run(`node "${CLI}" init "${noEditor}" --no-install --no-editor`);
+  assertFiles(noEditor, [".vscode"], { absent: true });
+
+  // --- existing project: editor config merges, never clobbers -----------------
+  const existing = tmp();
+  run("mkdir -p .vscode", existing);
+  writeFileSync(join(existing, "package.json"), JSON.stringify({ name: "app" }) + "\n");
+  writeFileSync(
+    join(existing, ".vscode/settings.json"),
+    JSON.stringify({ "editor.tabSize": 4, "cucumber.glue": ["src/my-steps/**/*.ts"] }) + "\n",
+  );
+  writeFileSync(join(existing, ".vscode/extensions.json"), JSON.stringify({ recommendations: ["esbenp.prettier-vscode"] }) + "\n");
+  run(`node "${CLI}" init . --no-install`, existing);
+  const merged = json(existing, ".vscode/settings.json");
+  if (merged["editor.tabSize"] !== 4) throw new Error("editor merge dropped a user setting");
+  if (merged["cucumber.glue"]?.[0] !== "src/my-steps/**/*.ts") throw new Error("editor merge overwrote user cucumber.glue");
+  if (!merged["cucumber.features"]) throw new Error("editor merge did not add cucumber.features");
+  const recs = json(existing, ".vscode/extensions.json").recommendations;
+  if (!recs.includes("esbenp.prettier-vscode") || !recs.includes("cucumberopen.cucumber-official")) {
+    throw new Error("extension recommendations not merged");
+  }
 
   // --- suite + all agents ---------------------------------------------------
   const agents = tmp();

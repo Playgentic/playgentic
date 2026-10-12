@@ -40,6 +40,7 @@ npx playgentic init .
   - two GitHub Actions workflows:
     - **Lint:** prettier, eslint, docstring lint and typecheck
     - **Playwright:** runs the desktop and mobile suites against the app at the `TARGET_URL` repo secret
+  - VS Code config for the official [Cucumber extension](https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official), so feature steps link to their definitions out of the box. It merges into an existing `.vscode/`; skip it with `--no-editor`.
 - **Suite wiki** in `.playgentic/wiki/`:
   - **`CONVENTIONS.md`:** your coding style and testing expectations (UI, API, locators, page objects, data).
   - **`extensions/<agent>.md`:** rules that extend or override each playgentic agent.

@@ -29,7 +29,12 @@ scripts/                    # zero-dep tooling: wiki, step lint
 playwright.config.ts        # device projects, reporters
 AGENTS.md / CLAUDE.md       # suite conventions for coding agents (with --agents)
 .playgentic/config.json     # agent pipeline config (with --agents)
+.vscode/                    # Cucumber extension glue: feature steps link to their definitions
 ```
+
+The `.vscode/` settings point the official Cucumber extension at `tests/features/` and the step
+glue. If you move steps or features, update `cucumber.glue` / `cucumber.features` there too, or
+the editor will underline steps that still run fine.
 
 ## Core config & how to extend
 

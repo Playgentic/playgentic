@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **VS Code Cucumber wiring out of the box.** `init` writes `.vscode/settings.json` (`cucumber.features` and `cucumber.glue` pointed at the suite's features, `baseTest.ts` and step files) and recommends the official Cucumber extension in `.vscode/extensions.json`. Steps resolve in the editor (go-to-definition, autocomplete, no undefined-step underlines) with no setup. The write is a merge: existing settings and recommendations are kept, and a JSONC file with comments is left untouched with a warning. Pass `--no-editor` to skip it.
 
 ## [0.4.0] - 2026-10-11
 
