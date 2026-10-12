@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.4.1] - 2026-10-12
+
 ### Added
 
 - **VS Code Cucumber wiring out of the box.** `init` writes `.vscode/settings.json` (`cucumber.features` and `cucumber.glue` pointed at the suite's features, `baseTest.ts` and step files) and recommends the official Cucumber extension in `.vscode/extensions.json`. Steps resolve in the editor (go-to-definition, autocomplete, no undefined-step underlines) with no setup. The write is a merge: existing settings and recommendations are kept, and a JSONC file with comments is left untouched with a warning. Pass `--no-editor` to skip it.
@@ -178,7 +182,8 @@ Everything below is part of this initial release.
 - MIT license, `README.md`, and the `docs/agent-design.md` design doc (component map, the
   gen/heal loops, runner isolation, and the sync model).
 
-[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/playgentic/playgentic/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/playgentic/playgentic/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/playgentic/playgentic/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/playgentic/playgentic/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/playgentic/playgentic/compare/v0.2.0...v0.3.0
